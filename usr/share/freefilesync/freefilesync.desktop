@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=FreeFileSync
+Comment=File sync tool
+Keywords=synchronization;
+Exec=/usr/share/freefilesync/FreeFileSync/FreeFileSync %f
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=freefilesync
+Categories=Utility;FileTools;
+StartupNotify=true

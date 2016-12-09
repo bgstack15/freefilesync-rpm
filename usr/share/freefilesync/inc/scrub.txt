@@ -1,0 +1,18 @@
+# scrubpyversion 2016-11-16a or newer
+source /home/bgstack15-local/rpmbuild/SOURCES/freefilesync-8.7-1
+target /home/work/freefilesync.clean
+ignore "tgz png gif jpg git swp ico ini"
+BGSTACK15	BGSTACK15
+Bgstack15	Bgstack15
+bgstack15	bgstack15
+BNAME	BNAME
+Bname	Bname
+bname	bname
+STACK	STACK
+Stack	Stack
+stack	stack
+EXAMPLE	EXAMPLE
+example	example
+".COM"	".COM"
+".com"	".com"
+"203.0."	"203.0."
