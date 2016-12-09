@@ -51,7 +51,9 @@ rm -f /usr/share/applications/freefilesync.desktop >/dev/null 2>&1
 /usr/share/freefilesync/inc
 /usr/share/freefilesync/inc/freefilesync_ver.txt
 /usr/share/freefilesync/inc/sha256sum.txt
+/usr/share/freefilesync/inc/scrub.txt
 %config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
+/usr/share/freefilesync/inc/localize_git.sh
 /usr/share/freefilesync/uninstall-ffs.sh
 %attr(555, -, -) /usr/share/freefilesync/FreeFileSync
 %attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
