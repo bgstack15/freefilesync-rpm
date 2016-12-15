@@ -36,30 +36,74 @@ fi
 rm -rf %{buildroot}
 
 %post
+# Deploy icons
+which xdg-icon-resource 1>/dev/null 2>&1 && {
+   for num in 16 24 32 48 64 128;
+   do
+      for thistheme in hicolor;
+      do
+         xdg-icon-resource install --context apps --size "${num}" --theme "${thistheme}" --novendor --noupdate %{_datarootdir}/%{name}/inc/icons/%{name}-${num}.png %{name} &
+      done
+   done
+   for word in HighContrast hicolor;
+   do
+      test -d %{_datarootdir}/icons/${word} 1>/dev/null 2>&1 && cp -p %{_datarootdir}/%{name}/inc/icons/%{name}-${word}-scalable.svg %{_datarootdir}/icons/${word}/scalable/apps/%{name}.svg
+      gtk-update-icon-cache %{_datarootdir}/icons/${word} -q &
+   done
+   xdg-icon-resource forceupdate &
+} 1>/dev/null 2>&1
+
 # Deploy desktop file
 desktop-file-install --rebuild-mime-info-cache %{_datarootdir}/%{name}/%{name}.desktop 1>/dev/null 2>&1
 
 %postun
-rm -f /usr/share/applications/freefilesync.desktop >/dev/null 2>&1
+if test "$1" = "0";
+then
+   # total uninstall
 
-%changelog
+   # Remove desktop file
+   rm -f /usr/share/applications/%{name}.desktop >/dev/null 2>&1
+
+   # Remove icons
+   which xdg-icon-resource 1>/dev/null 2>&1 && {
+      for num in 16 24 32 48 64 128;
+      do
+         for thistheme in hicolor;
+         do
+            xdg-icon-resource uninstall --context apps --size "${num}" --theme "${thistheme}" --noupdate %{name}
+         done
+      done
+      for word in HighContrast hicolor;
+      do
+         rm -f %{_datarootdir}/icons/${word}/scalable/apps/%{name}.svg 
+      done
+      xdg-icon-resource forceupdate 
+   } 1>/dev/null 2>&1
+fi 
+exit 0
 
 %files
 /usr
 /usr/share
 /usr/share/freefilesync
+%attr(777, -, -) /usr/share/freefilesync/FreeFileSync
 /usr/share/freefilesync/inc
-/usr/share/freefilesync/inc/freefilesync_ver.txt
-/usr/share/freefilesync/inc/sha256sum.txt
-/usr/share/freefilesync/inc/scrub.txt
 %config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
+/usr/share/freefilesync/inc/scrub.txt
+/usr/share/freefilesync/inc/sha256sum.txt
+/usr/share/freefilesync/inc/freefilesync_ver.txt
+/usr/share/freefilesync/inc/icons
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
+/usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-64.png
 /usr/share/freefilesync/inc/localize_git.sh
-/usr/share/freefilesync/uninstall-ffs.sh
-%attr(555, -, -) /usr/share/freefilesync/FreeFileSync
 %attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
-/usr/share/freefilesync/files-for-versioning.txt
+/usr/share/freefilesync/uninstall-ffs.sh
 /usr/share/freefilesync/install-ffs.sh
+/usr/share/freefilesync/files-for-versioning.txt
 /usr/share/freefilesync/docs
-%doc %attr(444, -, -) /usr/share/freefilesync/docs/packaging.txt
 %doc %attr(444, -, -) /usr/share/freefilesync/docs/README.txt
+%doc %attr(444, -, -) /usr/share/freefilesync/docs/packaging.txt
 /usr/share/freefilesync/docs/freefilesync.spec
+/usr/share/freefilesync/docs/files-for-versioning.txt
