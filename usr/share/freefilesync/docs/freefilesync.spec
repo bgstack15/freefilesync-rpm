@@ -1,6 +1,6 @@
 Name:		freefilesync
 Version:	8.7
-Release:	1
+Release:	2
 Summary:	FreeFileSync 8.7 for Fedora
 
 Group:		Applications/File

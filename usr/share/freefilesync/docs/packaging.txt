@@ -4,8 +4,7 @@ Author: bgstack15
 Startdate: 2016-06-20
 Title: Packaging instructions for freefilesync
 Purpose: To make it easier to build the package
-History: 2016-08-08 version 8.3
-   2016-12-09 version 8.7-1
+History: 
 Usage:
 Reference: README.txt, bgscripts-packaging.txt
 Improve:
@@ -15,13 +14,12 @@ Document: Below this line
 ### PACKAGING for rhel/centos/fedora
 rpmbuilddir=~/rpmbuild/
 package=freefilesync
-version=8.7-1
+version=8.7-2
 shortversion=8.7
 packagespecfile="${package}-${version}/usr/share/${package}/docs/${package}.spec"
 sed -i -n '1,/^\%files$/p;' ${rpmbuilddir}/SOURCES/"${packagespecfile}"
 cd ${rpmbuilddir}/SOURCES/"${package}-${version}"
-#find * \( ! -type d -o -regex '.*Languages\|.*Help' \) ! -regex '.*\(Languages\|Help\).+' ! -regex '.*?.swp' ! -regex '.*?DEBIAN.*?' | sed -e 's/^/\//;' -e 's/\(\(.*packaging\|.*README\)\.txt\)/%doc %attr(444, -, -) \1/;' -e 's/\(.*CHANGELOG.*\)/%doc \1/;' -e 's/\(.*\.ini\|.*xml\)/%config %attr(666, -, -) \1/;' -e 's/\(.*\.desktop\)/%attr(666, -, -) \1/;' -e 's/\(.*\/FreeFileSync$\)/%attr(555, -, -) \1/;' >> ${rpmbuilddir}/SOURCES/"${packagespecfile}"
-find * ! -regex '.*?.swp' ! -regex '.*?DEBIAN.*?' | sed -e 's/^/\//;' -e 's/\(\(.*packaging\|.*README\)\.txt\)/%doc %attr(444, -, -) \1/;' -e 's/\(.*CHANGELOG.*\)/%doc \1/;' -e 's/\(.*\.ini\|.*xml\)/%config %attr(666, -, -) \1/;' -e 's/\(.*\.desktop\)/%attr(666, -, -) \1/;' -e 's/\(.*\/FreeFileSync$\)/%attr(555, -, -) \1/;' >> ${rpmbuilddir}/SOURCES/"${packagespecfile}"
+find * ! -regex '.*?.swp' ! -regex '.*?DEBIAN.*?' | sed -e 's/^/\//;' -e 's/\(\(.*packaging\|.*README\)\.txt\)/%doc %attr(444, -, -) \1/;' -e 's/\(.*CHANGELOG.*\)/%doc \1/;' -e 's/\(.*\.ini\|.*xml\)/%config %attr(666, -, -) \1/;' -e 's/\(.*\.desktop\)/%attr(666, -, -) \1/;' -e 's/\(.*\/FreeFileSync$\)/%attr(777, -, -) \1/;' >> ${rpmbuilddir}/SOURCES/"${packagespecfile}"
 rm -rf ${rpmbuilddir}/SOURCES/"${package}-${shortversion}"; cp -prf ${rpmbuilddir}/SOURCES/"${package}-${version}" ${rpmbuilddir}/SOURCES/"${package}-${shortversion}"
 rm -rf ${rpmbuilddir}/SOURCES/"${package}-${shortversion}"/DEBIAN
 cd ${rpmbuilddir}/SOURCES
@@ -34,7 +32,6 @@ rm -rf ${rpmbuilddir}/SOURCES/"${package}-${shortversion}"
 ### PACKAGING in a master.tgz
 cd ~/deb || cd ~/rpmbuild/SOURCES
 package=freefilesync
-version=8.7-1
+version=8.7-2
 rm -rf ./"${package}-${version}".master.tgz
 tar -zcf ./"${package}-${version}".master.tgz "${package}-${version}"/
-

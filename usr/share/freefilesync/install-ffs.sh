@@ -136,7 +136,7 @@ if test -f "${ini_source}";
 then
    /bin/cp -p "${ini_source}" "${ini_dest}" 2>/dev/null && { echo "Initialized the config file."; }
 fi
-chmod 0666 "${ini_dest}" 2>/dev/null
+chmod 0666 "${ini_source}" "${ini_dest}" 2>/dev/null
 
 # Provide final status notification
 echo "${package} ${pver} successfully installed."

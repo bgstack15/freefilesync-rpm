@@ -1,0 +1,4 @@
+docs/packaging.txt
+docs/freefilesync.spec
+inc/scrub.txt
+inc/localize_git.sh
