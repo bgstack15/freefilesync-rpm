@@ -23,3 +23,5 @@ Fixed the uninstall script so in the future upgrading freefilesync (rpm) will no
 2017-02-13 freefilesync 8.9-1
 Updated the install-ffs.sh reference to framework.
 Added inc/pack script and removed docs/packaging.txt.
+Added get-files and redesigned how it scans the files and directories.
+Rewrote spec icon deployment to match current design.

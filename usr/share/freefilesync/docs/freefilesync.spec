@@ -5,7 +5,7 @@ Summary:	FreeFileSync 8.9 for Fedora
 
 Group:		Applications/File
 License:	GPL 3.0 
-URL:		http://bgstack15.wordpress.com
+URL:		http://bgstack15.wordpress.com/
 Source0:	freefilesync.tgz
 
 Packager:	Bgstack15 <bgstack15@gmail.com>
@@ -14,7 +14,7 @@ Buildarch:	x86_64
 #Requires:	
 
 %description
-FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized directories.
+FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized directories.It is useful for GUI environments and for detailed file comparisons. Rsync is recommended for automated solutions and in headless environments.
 
 #%global debug_package %{nil}
 
@@ -27,7 +27,7 @@ FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized 
 %install
 #%make_install
 rm -rf %{buildroot}
-rsync -a . %{buildroot}/ --exclude='**/.*.swp'
+rsync -a . %{buildroot}/ --exclude='**/.*.swp' --exclude='**/.git'
 
 # Run install script
 if test -x %{buildroot}%{_datarootdir}/%{name}/install-ffs.sh;
@@ -39,49 +39,81 @@ fi
 rm -rf %{buildroot}
 
 %post
+# rpm post 2017-02-13
 # Deploy icons
 which xdg-icon-resource 1>/dev/null 2>&1 && {
-   for num in 16 24 32 48 64 128;
+
+   # Deploy default application icons
+   for theme in hicolor HighContrast;
    do
-      for thistheme in hicolor;
+
+      # Deploy scalable application icons
+      cp -p %{_datarootdir}/%{name}/inc/icons/%{name}-${theme}-scalable.svg %{_datarootdir}/icons/${theme}/scalable/apps/freefilesync.svg
+
+      # Deploy size application icons
+      for size in 64 128;
       do
-         xdg-icon-resource install --context apps --size "${num}" --theme "${thistheme}" --novendor --noupdate %{_datarootdir}/%{name}/inc/icons/%{name}-${num}.png %{name} &
+         xdg-icon-resource install --context apps --size "${size}" --theme "${theme}" --novendor --noupdate %{_datarootdir}/%{name}/inc/icons/%{name}-${theme}-${size}.png freefilesync &
       done
    done
-   for word in HighContrast hicolor;
-   do
-      test -d %{_datarootdir}/icons/${word} 1>/dev/null 2>&1 && cp -p %{_datarootdir}/%{name}/inc/icons/%{name}-${word}-scalable.svg %{_datarootdir}/icons/${word}/scalable/apps/%{name}.svg
-      gtk-update-icon-cache %{_datarootdir}/icons/${word} -q &
-   done
+
+   # Deploy custom application icons
+   # none
+
+   # Update icon caches
    xdg-icon-resource forceupdate &
+   for word in hicolor HighContrast;
+   do
+      touch --no-create %{_datarootdir}/icons/${word}
+      gtk-update-icon-cache %{_datarootdir}/icons/${word} &
+   done
+
 } 1>/dev/null 2>&1
 
 # Deploy desktop file
 desktop-file-install --rebuild-mime-info-cache %{_datarootdir}/%{name}/%{name}.desktop 1>/dev/null 2>&1
 
+exit 0
+
 %postun
+# rpm postun 2017-02-13
 if test "$1" = "0";
 then
+{
    # total uninstall
 
    # Remove desktop file
-   rm -f /usr/share/applications/%{name}.desktop >/dev/null 2>&1
+   rm -f %{_datarootdir}/applications/%{name}.desktop
+   which update-desktop-database && update-desktop-database -q %{_datarootdir}/applications &
 
    # Remove icons
-   which xdg-icon-resource 1>/dev/null 2>&1 && {
-      for num in 16 24 32 48 64 128;
+   which xdg-icon-resource && {
+
+      # Remove default application icons
+      for theme in hicolor HighConstrast;
       do
-         for thistheme in hicolor;
+
+         # Remove scalable application icons
+         rm -f %{_datarootdir}/icons/${theme}/scalable/apps/freefilesync.svg
+
+         # Remove size application icons
+         for size in 64 128;
          do
-            xdg-icon-resource uninstall --context apps --size "${num}" --theme "${thistheme}" --noupdate %{name}
+            xdg-icon-resource uninstall --context apps --size "${size}" --theme "${theme}" --noupdate freefilesync &
          done
+
       done
-      for word in HighContrast hicolor;
+
+      # Update icon caches
+      xdg-icon-resource forceupdate &
+      for word in hicolor HighContrast;
       do
-         rm -f %{_datarootdir}/icons/${word}/scalable/apps/%{name}.svg 
+         touch --no-create %{_datarootdir}/icons/${word}
+         gtk-update-icon-cache %{_datarootdir}/icons/${word} &
       done
-      xdg-icon-resource forceupdate 
-   } 1>/dev/null 2>&1
+
+   }
+} 1>/dev/null 2>&1
 fi 
 exit 0
 
