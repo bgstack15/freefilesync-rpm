@@ -1,4 +1,4 @@
 # the only uncommented line in this file should contain the software version
 # retrievable from
 # curl -s http://www.freefilesync.org/download.php | grep -oiE "Download FreeFileSync.{0,20}Source" | sed 's/[^0-9.]//g;'
-8.7
+8.9

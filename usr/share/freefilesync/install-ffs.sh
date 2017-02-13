@@ -6,6 +6,7 @@
 # Purpose: Downloads and installs freefilesync from official source
 # Package: freefilesync
 # History: 
+#    2017-02-13 updated bgscripts reference
 # Usage: Is used during the rpm build phase. It is also generally available.
 # Reference: irfan-4.42-6 file /usr/share/irfan/install-irfanview.sh
 # Improve:
@@ -44,7 +45,7 @@ getsource() {
       then
          case "${_attempts}" in
             #1) . ~/.bashrc 1>/dev/null 2>&1;; # was breaking weirdly on some interal definition
-            2) test "$( ps -p $$ | xargs | awk '{print $NF}')" = "bash" && test -x /usr/bgscripts/bgscripts.bashrc && . /usr/bgscripts/bgscripts.bashrc --noglobalprofile 1>/dev/null 2>&1;;
+            2) test "$( ps -p $$ | xargs | awk '{print $NF}')" = "bash" && test -x /usr/bin/bp && . /usr/bin/bp --noclear --noglobalprofile 1>/dev/null 2>&1;;
             3) unset http_proxy; unset https_proxy; _gssource=$( echo "${_gssource}" | sed -e 's!'"${source1search}"'!'"${source1replace}"'!;' 2>/dev/null );;
             5) echo "File failed to download: ${_gssource}. Aborted." && exit 1;;
          esac
@@ -94,7 +95,7 @@ do
    fi
 done < "${infile}"
 # tmp1=$( echo "${pver}" | tr -d '.' ) # in case the source file needs the dot removed
-sourcefile="http://www.freefilesync.org/download/FreeFileSync_${pver}_openSUSE_64-bit.tar.gz"
+sourcefile="http://www.freefilesync.org/download/FreeFileSync_${pver}_openSUSE_Tumbleweed.tar.gz"
 source1search='\(www\.\)\?freefilesync\.org\/download'
 source1replace='mirror\.example\.com\/bgscripts\/freefilesync'
 
@@ -129,7 +130,7 @@ echo "Extracting ${package}."
 extract "${outdir}" -y "${temp_sw}" 1>/dev/null 2>&1 && rm -rf "${temp_sw}" "${temp_sw%%.*z}.tar" 2>/dev/null || { echo "Unable to extract for some reason. Aborted."; exit 1; }
 
 # Adjust permissions on the directories
-#chmod -R 0755 "${outdir}/Plugins" "${outdir}/Languages" "${outdir}/Toolbars" # WORKHERE
+#chmod -R 0755 "${outdir}/Plugins" "${outdir}/Languages" "${outdir}/Toolbars"
 
 # Initialize config file
 if test -f "${ini_source}";

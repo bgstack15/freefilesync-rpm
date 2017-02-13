@@ -1,7 +1,7 @@
 Name:		freefilesync
-Version:	8.7
-Release:	2
-Summary:	FreeFileSync 8.7 for Fedora
+Version:	8.9
+Release:	1
+Summary:	FreeFileSync 8.9 for Fedora
 
 Group:		Applications/File
 License:	GPL 3.0 
@@ -26,7 +26,10 @@ FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized 
 
 %install
 #%make_install
-rsync -a . %{buildroot}/
+rm -rf %{buildroot}
+rsync -a . %{buildroot}/ --exclude='**/.*.swp'
+
+# Run install script
 if test -x %{buildroot}%{_datarootdir}/%{name}/install-ffs.sh;
 then
    %{buildroot}%{_datarootdir}/%{name}/install-ffs.sh || exit 1
@@ -92,6 +95,7 @@ exit 0
 /usr/share/freefilesync/inc/scrub.txt
 /usr/share/freefilesync/inc/sha256sum.txt
 /usr/share/freefilesync/inc/freefilesync_ver.txt
+/usr/share/freefilesync/inc/pack
 /usr/share/freefilesync/inc/icons
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
@@ -104,6 +108,5 @@ exit 0
 /usr/share/freefilesync/files-for-versioning.txt
 /usr/share/freefilesync/docs
 %doc %attr(444, -, -) /usr/share/freefilesync/docs/README.txt
-%doc %attr(444, -, -) /usr/share/freefilesync/docs/packaging.txt
 /usr/share/freefilesync/docs/freefilesync.spec
 /usr/share/freefilesync/docs/files-for-versioning.txt

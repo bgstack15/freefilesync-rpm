@@ -1,1 +1,2 @@
 1a966e5a029dde481e0fdb1460e457aa923b7f4d580b517286629331f18a7747  FreeFileSync_8.7_openSUSE_64-bit.tar.gz
+d03b48c0c71467f7cfe7321c1f32a58cf29f43e41682b15cd6afd5c70d1b95d2  FreeFileSync_8.9_openSUSE_Tumbleweed.tar.gz
