@@ -86,27 +86,26 @@ fi
 exit 0
 
 %files
-/usr
-/usr/share
-/usr/share/freefilesync
+%dir /usr/share/freefilesync
+%dir /usr/share/freefilesync/inc
+%dir /usr/share/freefilesync/inc/icons
+%dir /usr/share/freefilesync/docs
 %attr(777, -, -) /usr/share/freefilesync/FreeFileSync
-/usr/share/freefilesync/inc
 %config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
 /usr/share/freefilesync/inc/scrub.txt
 /usr/share/freefilesync/inc/sha256sum.txt
 /usr/share/freefilesync/inc/freefilesync_ver.txt
 /usr/share/freefilesync/inc/pack
-/usr/share/freefilesync/inc/icons
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
 /usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-64.png
 /usr/share/freefilesync/inc/localize_git.sh
+/usr/share/freefilesync/inc/get-files
 %attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
 /usr/share/freefilesync/uninstall-ffs.sh
 /usr/share/freefilesync/install-ffs.sh
 /usr/share/freefilesync/files-for-versioning.txt
-/usr/share/freefilesync/docs
 %doc %attr(444, -, -) /usr/share/freefilesync/docs/README.txt
 /usr/share/freefilesync/docs/freefilesync.spec
 /usr/share/freefilesync/docs/files-for-versioning.txt
