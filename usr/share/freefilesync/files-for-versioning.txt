@@ -1,6 +1,0 @@
-inc/localize_git.sh
-inc/scrub.txt
-inc/freefilesync_ver.txt
-docs/packaging.txt
-docs/freefilesync.spec
-docs/README.txt

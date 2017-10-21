@@ -19,7 +19,7 @@ esac
 echo " $@ " | grep -qiE -- "help|usage|\s-h\s|\s-\?" 1>/dev/null 2>&1 && {
    # display help and exit
    less -F <<EOF
-pack utility version 2017-02-13a freefilesync
+pack utility version 2017-10-18a freefilesync
 usage: pack [ rpm | deb | tar | scrub ] [ --debug | -d {0-10} ]
 Provides a single command for building a package. This script is customized to each package.
 optional arguments:
@@ -37,7 +37,7 @@ shortversion="$( echo "${version}" | sed -e 's/-.*//;' )"
 package="$( echo "${fullname}" | sed -e "s/-${version}//;" )"
 
 echo " $@ " | grep -qiE -- "rpm|rhel|redhat|centos|fedora|korora" 1>/dev/null 2>&1 && type=rpm
-echo " $@ " | grep -qiE -- "debian|ubuntu|deb\s|dpkg" 1>/dev/null 2>&1 && type=dpkg
+echo " $@ " | grep -qiE -- "debian|ubuntu|devuan|deb\s|dpkg" 1>/dev/null 2>&1 && type=dpkg
 echo " $@ " | grep -qiE -- "tar|tgz|gz" 1>/dev/null 2>&1 && type=targz
 echo " $@ " | grep -qiE -- "scrub" 1>/dev/null 2>&1 && type=scrub
 
@@ -51,16 +51,18 @@ case "${type}" in
 ### PACKAGING for rhel/centos/fedora
 # if you copy-paste this, be sure to define package, version, shortversion
 rpmbuilddir=~/rpmbuild/
-packagespecfile="${package}-${version}/usr/share/${package}/docs/${package}.spec"
-sed -i -n '1,/^\%files$/p;' "${rpmbuilddir}/SOURCES/${packagespecfile}"
+packagespecfile="${package}-${version}/usr/share/${package}/build/${package}.spec"
+sed -n -e '1,/^\%files$/p;' "${rpmbuilddir}/SOURCES/${packagespecfile}" > "${rpmbuilddir}/SOURCES/${packagespecfile}.$$.swp" # removes files and changelog
 cd "${rpmbuilddir}/SOURCES/${package}-${version}"
-"${rpmbuilddir}/SOURCES/${package}-${version}/usr/share/${package}/inc/get-files" rpm >> "${rpmbuilddir}/SOURCES/${packagespecfile}"
+"${rpmbuilddir}/SOURCES/${package}-${version}/usr/share/${package}/build/get-files" rpm >> "${rpmbuilddir}/SOURCES/${packagespecfile}.$$.swp"
+{ printf '\n'; sed -n -e '/^\%changelog/,$p' "${rpmbuilddir}/SOURCES/${packagespecfile}" ; } >> "${rpmbuilddir}/SOURCES/${packagespecfile}.$$.swp"
+mv -f "${rpmbuilddir}/SOURCES/${packagespecfile}.$$.swp" "${rpmbuilddir}/SOURCES/${packagespecfile}"
 rm -rf "${rpmbuilddir}/SOURCES/${package}-${shortversion}"; cp -prf "${rpmbuilddir}/SOURCES/${package}-${version}" "${rpmbuilddir}/SOURCES/${package}-${shortversion}"
 rm -rf "${rpmbuilddir}/SOURCES/${package}-${shortversion}/DEBIAN"
 cd "${rpmbuilddir}/SOURCES"
-rm -rf "${package}.tgz"; tar -zc --exclude='.git' --exclude='README.md' -f "${package}.tgz" "${package}-${shortversion}"
-\cp -pf "${rpmbuilddir}/SOURCES/${packagespecfile}" "${rpmbuilddir}/SPECS"
-cd "${rpmbuilddir}/RPMS/x86_64"
+rm -rf "${package}.tgz"; tar -zc --exclude='.git*' --exclude='README.md' -f "${package}.tgz" "${package}-${shortversion}"
+cp -p "${rpmbuilddir}/SOURCES/${packagespecfile}" "${rpmbuilddir}/SPECS"
+mkdir -p "${rpmbuilddir}/RPMS/x86_64"; cd "${rpmbuilddir}/RPMS/x86_64"
 rpmbuild -bb "${rpmbuilddir}/SPECS/${package}.spec"
 rm -rf "${rpmbuilddir}/SOURCES/${package}-${shortversion}/" "${rpmbuilddir}/SOURCES/${package}.tgz"
 

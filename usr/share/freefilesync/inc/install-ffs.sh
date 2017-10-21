@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 # File: /usr/share/freefilesync/install-ffs.sh
 # Author: bgstack15
 # Startdate: 2016-11-28 10:46
@@ -7,6 +7,7 @@
 # Package: freefilesync
 # History: 
 #    2017-02-13 updated bgscripts reference
+#    2017-10-21 updated for albion320.no-ip.biz location
 # Usage: Is used during the rpm build phase. It is also generally available.
 # Reference: irfan-4.42-6 file /usr/share/irfan/install-irfanview.sh
 # Improve:
@@ -21,7 +22,6 @@ ini_source=${RPM_BUILD_ROOT}/usr/share/${package}/inc/GlobalSettings.xml
 ini_dest=${RPM_BUILD_ROOT}/usr/share/${package}/FreeFileSync/GlobalSettings.xml
 sha256sumfile=${RPM_BUILD_ROOT}/usr/share/${package}/inc/sha256sum.txt
 sourcefile="" # Defined later. Look it up.
-
 
 # Functions
 getsource() {
@@ -95,9 +95,9 @@ do
    fi
 done < "${infile}"
 # tmp1=$( echo "${pver}" | tr -d '.' ) # in case the source file needs the dot removed
-sourcefile="http://www.freefilesync.org/download/FreeFileSync_${pver}_openSUSE_Tumbleweed.tar.gz"
+sourcefile="https://www.freefilesync.org/download/FreeFileSync_${pver}_openSUSE_Tumbleweed_64-bit.tar.gz"
 source1search='\(www\.\)\?freefilesync\.org\/download'
-source1replace='mirror\.example\.com\/bgscripts\/freefilesync'
+source1replace='albion320\.no-ip\.biz\/smith122\/repo\/rpm\/freefilesync'
 
 # Check dependencies
 if ! test -x "$( which curl 2>/dev/null)";

@@ -1,5 +1,5 @@
 Name:		freefilesync
-Version:	8.9
+Version:	9.4
 Release:	1
 Summary:	FreeFileSync 8.9 for Fedora
 
@@ -30,9 +30,9 @@ rm -rf %{buildroot}
 rsync -a . %{buildroot}/ --exclude='**/.*.swp' --exclude='**/.git'
 
 # Run install script
-if test -x %{buildroot}%{_datarootdir}/%{name}/install-ffs.sh;
+if test -x %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh;
 then
-   %{buildroot}%{_datarootdir}/%{name}/install-ffs.sh || exit 1
+   %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh || exit 1
 fi
 
 %clean
@@ -121,23 +121,29 @@ exit 0
 %dir /usr/share/freefilesync
 %dir /usr/share/freefilesync/inc
 %dir /usr/share/freefilesync/inc/icons
-%dir /usr/share/freefilesync/docs
-%attr(777, -, -) /usr/share/freefilesync/FreeFileSync
-%config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
-/usr/share/freefilesync/inc/scrub.txt
+%dir /usr/share/freefilesync/build
+/usr/share/freefilesync/inc/install-ffs.sh
 /usr/share/freefilesync/inc/sha256sum.txt
 /usr/share/freefilesync/inc/freefilesync_ver.txt
-/usr/share/freefilesync/inc/pack
+%config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
-/usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
 /usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-64.png
-/usr/share/freefilesync/inc/localize_git.sh
-/usr/share/freefilesync/inc/get-files
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
+/usr/share/freefilesync/inc/uninstall-ffs.sh
+/usr/share/freefilesync/build/scrub.txt
+/usr/share/freefilesync/build/freefilesync.spec
+/usr/share/freefilesync/build/localize_git.sh
+/usr/share/freefilesync/build/pack
+/usr/share/freefilesync/build/get-files
+/usr/share/freefilesync/build/files-for-versioning.txt
 %attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
-/usr/share/freefilesync/uninstall-ffs.sh
-/usr/share/freefilesync/install-ffs.sh
-/usr/share/freefilesync/files-for-versioning.txt
-%doc %attr(444, -, -) /usr/share/freefilesync/docs/README.txt
-/usr/share/freefilesync/docs/freefilesync.spec
-/usr/share/freefilesync/docs/files-for-versioning.txt
+/usr/share/freefilesync/doc
+%attr(777, -, -) /usr/share/freefilesync/FreeFileSync
+/usr/share/doc/freefilesync/version.txt
+%doc %attr(444, -, -) /usr/share/doc/freefilesync/README.txt
+
+%changelog
+* Sat Oct 21 2017 B Stack <bgstack15@gmail.com> 9.4-1
+- Updated content. See doc/README.txt
+- Rearranged directory structure to match current standards

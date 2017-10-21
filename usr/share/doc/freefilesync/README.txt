@@ -1,3 +1,5 @@
+FreeFileSync README
+###Readme
 Package source is the official FreefileSync 8.9 offering FreeFileSync_8.9_openSUSE_Tumbleweed.tar.gz
 See its changelog.txt for updates to the actual software.
 Package maintainer: bgstack15@gmail.com
@@ -6,13 +8,18 @@ Package maintainer: bgstack15@gmail.com
 High contrast icon by Freepik http://www.flaticon.com/packs/extended-ui
 
 ###How to maintain this package
-For the highest chances of downloading the file, save the source tarball to the mirror server.
-You need to collect the sha256sum for each tarball and put them in the usr/share/freefilesync/inc/sha256sum.txt file.
 ####On the mirror server
-cd /mnt/mirror/bgscripts/freefilesync
-sha256sum *.tar.gz > sha256sum.txt
+Download the latest freefilesync using firefox, while inspecting the network traffic. Find the cdn site.
+
+    # Download the latest application version from:
+    cd /mnt/public/www/smith122/repo/rpm/freefilesync
+    thisver=9.4
+    curl -O -J http://download1053.mediafireuserdownload.com/efawy8dj1uog/nzrklstofjb7xa6/FreeFileSync_9.4_openSUSE_Tumbleweed_64-bit.tar.gz
+    # You need to collect the sha256sum for each tarball and put them in the usr/share/freefilesync/inc/sha256sum.txt file.
+    sha256sum *.tar.gz > sha256sum.txt
+
 ####On the rpmbuild server
-curl http://mirror/bgscripts/freefilesync/sha256sum.txt > ~/rpmbuild/SOURCES/freefilesync-8.9-1/usr/share/freefilesync/inc/sha256sum.txt
+curl http://albion320.no-ip.biz/smith122/repo/rpm/freefilesync/sha256sum.txt > ~/rpmbuild/SOURCES/freefilesync-9.4-1/usr/share/freefilesync/inc/sha256sum.txt
 
 ###Changelog
 2016-12-15 freefilesync 8.7-2
@@ -25,3 +32,6 @@ Updated the install-ffs.sh reference to framework.
 Added inc/pack script and removed docs/packaging.txt.
 Added get-files and redesigned how it scans the files and directories.
 Rewrote spec icon deployment to match current design.
+
+* 2017-10-21 Wed B Stack <bgstack15@gmail.com> 9.4-1
+- Rearranged directory structure to match current standards
