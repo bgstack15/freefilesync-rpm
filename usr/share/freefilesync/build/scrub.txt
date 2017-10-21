@@ -11,8 +11,3 @@ bname	bname
 STACK	STACK
 Stack	Stack
 stack	stack
-EXAMPLE	EXAMPLE
-example	example
-".COM"	".COM"
-".com"	".com"
-"203.0."	"203.0."

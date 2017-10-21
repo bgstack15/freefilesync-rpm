@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 # File: /usr/share/freefilesync/install-ffs.sh
 # Author: bgstack15
 # Startdate: 2016-11-28 10:46
