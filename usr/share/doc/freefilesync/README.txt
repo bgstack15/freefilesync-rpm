@@ -1,6 +1,6 @@
 FreeFileSync README
 ###Readme
-Package source is the official FreefileSync offering from the openSUSE Tumbleweed.
+Package source is the official FreefileSync source.
 See its changelog.txt for updates to the actual software.
 Package maintainer: bgstack15@gmail.com
 
@@ -14,12 +14,12 @@ Download the latest freefilesync using firefox, while inspecting the network tra
     # Download the latest application version from:
     cd /mnt/public/www/smith122/repo/rpm/freefilesync
     thisver=9.4
-    curl -O -J http://download1053.mediafireuserdownload.com/efawy8dj1uog/nzrklstofjb7xa6/FreeFileSync_9.4_openSUSE_Tumbleweed_64-bit.tar.gz
+    #curl -O -J http://download1053.mediafireuserdownload.com/efawy8dj1uog/nzrklstofjb7xa6/FreeFileSync_9.4_openSUSE_Tumbleweed_64-bit.tar.gz
     # You need to collect the sha256sum for each tarball and put them in the usr/share/freefilesync/inc/sha256sum.txt file.
-    sha256sum *.tar.gz > sha256sum.txt
+    sha256sum *.tar.gz *.zip > sha256sum.txt
 
 ####On the rpmbuild server
-curl http://albion320.no-ip.biz/smith122/repo/rpm/freefilesync/sha256sum.txt > ~/rpmbuild/SOURCES/freefilesync-9.4-1/usr/share/freefilesync/inc/sha256sum.txt
+#curl http://albion320.no-ip.biz/smith122/repo/rpm/freefilesync/sha256sum.txt > ~/rpmbuild/SOURCES/freefilesync-9.4-1/usr/share/freefilesync/inc/sha256sum.txt
 
 ###Changelog
 2016-12-15 freefilesync 8.7-2
@@ -27,12 +27,21 @@ Added a few icons, notably the hicolor and HighContrast themes.
 Fixed the GlobalSettings.xml permissions so you can actually save your settings now.
 Fixed the uninstall script so in the future upgrading freefilesync (rpm) will not remove your desktop file
 
+###Reference
+https://www.freefilesync.org/forum/viewtopic.php?t=2585&p=13068&hilit=build#p13068
+https://www.freefilesync.org/forum/viewtopic.php?t=676
+https://www.freefilesync.org/forum/viewtopic.php?t=2585
+https://github.com/PhantomX/chinforpms/blob/9e65a18f78c6e842958a84d1862435495b77ef33/freefilesync/freefilesync.spec
+
 2017-02-13 freefilesync 8.9-1
 Updated the install-ffs.sh reference to framework.
 Added inc/pack script and removed docs/packaging.txt.
 Added get-files and redesigned how it scans the files and directories.
 Rewrote spec icon deployment to match current design.
 
-* 2017-10-21 Wed B Stack <bgstack15@gmail.com> 9.4-1
+* 2017-10-21 Sat B Stack <bgstack15@gmail.com> 9.4-1
 - Rearranged directory structure to match current standards
 - Updated to latest version
+
+* 2017-10-22 Sun B Stack <bgstack15@gmail.com> 9.4-2
+- Built from source now!

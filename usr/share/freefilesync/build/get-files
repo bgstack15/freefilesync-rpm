@@ -12,6 +12,7 @@ find * -type d \
    \) \
    ! -regex '.*\/freefilesync\/FreeFileSync' \
    | sed -e 's/^/%dir \//;'
+
 find * -mindepth 1 ! -name "${package}.spec.$$.swp" \
    \( \
       ! -type d -o \
@@ -27,6 +28,7 @@ s/\(.*\.ini\|.*xml\)/%config %attr(666, -, -) \1/;
 s/\(.*\.desktop\)/%attr(666, -, -) \1/;
 s/\(.*\/FreeFileSync$\)/%attr(777, -, -) \1/;
 '
+printf '/usr/share/freefilesync/source\n'
 
       ;;
    *)

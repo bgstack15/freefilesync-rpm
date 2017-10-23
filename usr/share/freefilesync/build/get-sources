@@ -1,0 +1,36 @@
+#!/bin/sh
+# File: get-sources
+
+# goal: get all %global variables defined as shell variables as well as in sed
+tmpfile1="$( mktemp )"
+filterfile1="$( mktemp )"
+grep -E "^\s*%global" "${rpmbuilddir}/SOURCES/${packagespecfile}" | awk '{$1="";$2=$2"=";print;}' | sed -r -e 's/\s*=\s*/=/g;' -e 's/^\s*//;' > "${tmpfile1}"
+. "${tmpfile1}"
+sed -r -e 's4^4s/%\\{4;' -e 's/=/\\}\//;' -e 's4$4\/g;4;' "${tmpfile1}" > "${filterfile1}"
+
+# get additional ones that are harder to fetch
+dist="$( rpm --showrc | grep -E "dist\s*\." | awk '{print $3}' )"
+
+# goal: interpret the rpm spec file and download to ~/rpmbuild/SOURCES all the Source[0-9]?: files.
+getthesefiles1="$( mktemp )"
+pushd "${rpmbuilddir}/SOURCES" 1>/dev/null 2>&1
+grep -E "^\s*Source.?:" "${rpmbuilddir}/SOURCES/${packagespecfile}" | \
+   awk '{$1="";print;}' | \
+   sed -r -e "
+s/%\{name\}/${package}/g;
+s/%\{version\}/${shortversion}/g;
+s/%\{\??dist\}/${dist}/g;
+s/^\s*//;
+" -f "${filterfile1}" | \
+# limit to only remote sources
+   grep -iE "(https?|ftps?)" > "${getthesefiles1}"
+#echo "-------------------"; cat "${getthesefiles1}"; echo "----DONE-----"
+
+# remove local copy if already exists
+sed 's4^.*\/44' "${getthesefiles1}" | xargs -n1 -I'[]' rm -f [] 2>/dev/null
+
+# download sources
+xargs -n1 -I'[]' wget --no-verbose [] < "${getthesefiles1}"
+
+popd 1>/dev/null 2>&1;
+rm -f "${tmpfile1}" "${filterfile1}" "${getthesefiles1}" 1>/dev/null 2>&1

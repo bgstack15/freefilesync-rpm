@@ -1,16 +1,26 @@
+%global pname FreeFileSync
 Name:		freefilesync
 Version:	9.4
-Release:	1
-Summary:	FreeFileSync 8.9 for Fedora
+Release:	2%{?dist}
+Summary:	FreeFileSync for Fedora
 
 Group:		Applications/File
 License:	GPL 3.0 
 URL:		http://bgstack15.wordpress.com/
 Source0:	freefilesync.tgz
+Source1:	https://albion320.no-ip.biz/smith122/repo/rpm/%{name}/%{pname}_%{version}_Source.tar.gz
+Source2:	https://albion320.no-ip.biz/smith122/repo/rpm/%{name}/%{pname}_%{version}%{?dist}.patch
 
 Packager:	Bgstack15 <bgstack15@gmail.com>
 Buildarch:	x86_64
-#BuildRequires:	
+BuildRequires:	wxGTK3-devel
+BuildRequires:	gcc-c++
+BuildRequires:	gtk+-devel
+BuildRequires:	gtk2-devel
+BuildRequires:	gtk3-devel
+BuildRequires:	boost-devel
+BuildRequires:	wxGTK-devel
+BuildRequires:	compat-wxGTK3-gtk2-devel
 #Requires:	
 
 %description
@@ -20,23 +30,33 @@ FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized 
 
 %prep
 #%setup -q
-%setup
+%setup -c -n %{name}-%{version}
+cd %{name}-%{version}/%{_datadir}/%{name}/source
+tar -zxf %{SOURCE1}
+cp %{SOURCE2} .
+patch -p0 < %{SOURCE2}
+sed -i -r -e 's4^(prefix\s*)=\s*%{_prefix}.*4\1= %{_datadir}/%{name}/%{pname}%{_prefix}4;' %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
+cp -p Changelog.txt FreeFileSync/Build/Changelog.txt
 
 %build
+%make_build -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source
+%make_build -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source/RealTimeSync
 
 %install
-#%make_install
 rm -rf %{buildroot}
-rsync -a . %{buildroot}/ --exclude='**/.*.swp' --exclude='**/.git'
+rsync -av ./freefilesync-9.4/ %{buildroot}/ --exclude='**/.*.swp' --exclude='**/.git'
+%make_install -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source
+%make_install -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source/RealTimeSync
 
 # Run install script
-if test -x %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh;
-then
-   %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh || exit 1
-fi
+#if test -x %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh;
+#then
+#   %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh || exit 1
+#fi
 
 %clean
-rm -rf %{buildroot}
+#rm -rf %{buildroot}
+exit 0
 
 %post
 # rpm post 2017-02-13
@@ -122,6 +142,7 @@ exit 0
 %dir /usr/share/freefilesync/inc
 %dir /usr/share/freefilesync/inc/icons
 %dir /usr/share/freefilesync/build
+%dir /usr/share/freefilesync/source
 /usr/share/freefilesync/inc/install-ffs.sh
 /usr/share/freefilesync/inc/sha256sum.txt
 /usr/share/freefilesync/inc/freefilesync_ver.txt
@@ -136,12 +157,14 @@ exit 0
 /usr/share/freefilesync/build/localize_git.sh
 /usr/share/freefilesync/build/pack
 /usr/share/freefilesync/build/get-files
+/usr/share/freefilesync/build/get-sources
 /usr/share/freefilesync/build/files-for-versioning.txt
 %attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
 /usr/share/freefilesync/doc
 %attr(777, -, -) /usr/share/freefilesync/FreeFileSync
 /usr/share/doc/freefilesync/version.txt
 %doc %attr(444, -, -) /usr/share/doc/freefilesync/README.txt
+/usr/share/freefilesync/source
 
 %changelog
 * Sat Oct 21 2017 B Stack <bgstack15@gmail.com> 9.4-1

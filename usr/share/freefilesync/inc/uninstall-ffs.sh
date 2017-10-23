@@ -2,7 +2,7 @@
 # File: /usr/share/freefilesync/uninstall-ffs.sh
 # Author: bgstack15
 # Startdate: 2016-11-29 08:58
-# Title: Script that uninstalls irfanview
+# Title: Script that uninstalls freefilesync
 # Purpose: Removes the software that was downloaded and installed
 # Package: freefilesync
 # History:
