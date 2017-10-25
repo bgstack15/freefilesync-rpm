@@ -13,13 +13,14 @@ getsource() {
 
    touch "${destfile}" 2>/dev/null || { echo "Cannot modify ${destfile}. Run as root, perhaps. Aborted."; exit 1; }
    local attempts=0
+   local thesecurlopts=""
    thissha=$( sha256sum "${destfile}" 2>/dev/null | cut -d' ' -f1 )
    if ! test "${thissha}" = "${goodsha}";
    then
       echo "Fetching ${sourceurl}"
-      while test ${attempts} -le 5;
+      while test ${attempts} -le 6;
       do
-         curl "${sourceurl}" --progress-bar --refer "${sourceurl}" > "${destfile}"
+         { curl "${sourceurl}" ${thesecurlopts} --progress-bar --refer "${sourceurl}" > "${destfile}"; } 2>&1 | grep -viE 'certificate|the domain name|^\s*$|ssl|insecure|cacert|bundle'
          # verify good download
          thissha=$( sha256sum "${destfile}" 2>/dev/null | cut -d' ' -f1 )
          if ! test -f "${destfile}" || test "$( stat -c "%s" "${destfile}" 2>/dev/null )" -lt 1000 || ! test "${thissha}" = "${goodsha}";
@@ -28,10 +29,16 @@ getsource() {
             2) test "$( ps -p $$ | xargs | awk '{print $NF}')" = "bash" && test -x /usr/bin/bp && . /usr/bin/bp --noclear --noglobalprofile 1>/dev/null 2>&1;;
             3) unset http_proxy; unset https_proxy;;
             4)
-               :
+               # ignore certificate errors
+               thesecurlopts="-k"
                # possibility: do a regex substitution like the old install-ffs.sh script does, to point to an alternate server
                ;;
-            5) echo "File failed to download: ${sourceurl}. Aborted." && exit 1;;
+            5)
+               # try removing the ssl
+               thesecurlopts=""
+               sourceurl="$( echo "${sourceurl}" | sed -r -e 's4(ht|f)tps:\/\/4\1tp:\/\/4;' )"
+               ;;
+            6) echo "File failed to download: ${sourceurl}. Aborted." && exit 1;;
             esac
          else
             # shortcircuit because it the sha256 sum matches      

@@ -13,14 +13,13 @@ Source2:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{vers
 
 Packager:	Bgstack15 <bgstack15@gmail.com>
 Buildarch:	x86_64
-BuildRequires:	wxGTK3-devel
-BuildRequires:	gcc-c++
-BuildRequires:	gtk+-devel
-BuildRequires:	gtk2-devel
-BuildRequires:	gtk3-devel
-BuildRequires:	wxGTK-devel
-BuildRequires:	boost-devel
-BuildRequires:	compat-wxGTK3-gtk2-devel
+BuildRequires:  boost-devel
+BuildRequires:  compat-wxGTK3-gtk2-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gtk3-devel
+BuildRequires:  gtk+-devel
+BuildRequires:  wxGTK3-devel
+BuildRequires:  wxGTK-devel
 #Requires:	
 
 %description
@@ -170,29 +169,29 @@ exit 0
 %dir /usr/share/freefilesync/inc/icons
 %dir /usr/share/freefilesync/build
 %dir /usr/share/freefilesync/source
-/usr/share/freefilesync/inc/install-ffs.sh
-/usr/share/freefilesync/inc/sha256sum.txt
 /usr/share/freefilesync/inc/freefilesync_ver.txt
 %config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
-/usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
-/usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-64.png
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
+/usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
 /usr/share/freefilesync/inc/uninstall-ffs.sh
-/usr/share/freefilesync/build/scrub.txt
+/usr/share/freefilesync/inc/sha256sum.txt
+/usr/share/freefilesync/inc/install-ffs.sh
+%attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
 /usr/share/freefilesync/build/freefilesync.spec
 /usr/share/freefilesync/build/localize_git.sh
-/usr/share/freefilesync/build/pack
+/usr/share/freefilesync/build/scrub.txt
 /usr/share/freefilesync/build/get-files
+/usr/share/freefilesync/build/pack
 /usr/share/freefilesync/build/get-sources
 /usr/share/freefilesync/build/files-for-versioning.txt
-%attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
+/usr/share/freefilesync/source
 /usr/share/freefilesync/doc
 %attr(777, -, -) /usr/share/freefilesync/app
-/usr/share/freefilesync/source
-/usr/share/doc/freefilesync/version.txt
 %doc %attr(444, -, -) /usr/share/doc/freefilesync/README.txt
 /usr/share/doc/freefilesync/REFERENCES.txt
+/usr/share/doc/freefilesync/version.txt
 
 %changelog
 * Sat Oct 21 2017 B Stack <bgstack15@gmail.com> 9.4-1
