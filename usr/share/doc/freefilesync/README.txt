@@ -9,17 +9,18 @@ High contrast icon by Freepik http://www.flaticon.com/packs/extended-ui
 
 ###How to maintain this package
 ####On the mirror server
-Download the latest freefilesync using firefox, while inspecting the network traffic. Find the cdn site.
+Download the latest application using firefox, while inspecting the network traffic. Find the cdn site.
 
     # Download the latest application version from:
-    cd /mnt/public/www/smith122/repo/rpm/freefilesync
+    cd /mnt/public/www/smith122/repo/patch/freefilesync
     thisver=9.4
-    #curl -O -J http://download1053.mediafireuserdownload.com/efawy8dj1uog/nzrklstofjb7xa6/FreeFileSync_9.4_openSUSE_Tumbleweed_64-bit.tar.gz
-    # You need to collect the sha256sum for each tarball and put them in the usr/share/freefilesync/inc/sha256sum.txt file.
-    sha256sum *.tar.gz *.zip > sha256sum.txt
+    curl -O -J http://download1053.mediafireuserdownload.com/efawy8dj1uog/nzrklstofjb7xa6/FreeFileSync_9.4_Source.zip
+    # You need to collect the sha256sum for each source object (tarball, patch, etc.) and put them in the usr/share/freefilesync/inc/sha256sum.txt file.
+    sha256sum *.tar.gz *.tgz *.zip *.patch 1> sha256sum.txt 2>/dev/null
 
 ####On the rpmbuild server
-#curl http://albion320.no-ip.biz/smith122/repo/rpm/freefilesync/sha256sum.txt > ~/rpmbuild/SOURCES/freefilesync-9.4-1/usr/share/freefilesync/inc/sha256sum.txt
+
+    curl http://albion320.no-ip.biz/smith122/repo/patch/freefilesync/sha256sum.txt > ~/rpmbuild/SOURCES/freefilesync-9.4-2/usr/share/freefilesync/inc/sha256sum.txt
 
 ###Changelog
 2016-12-15 freefilesync 8.7-2
@@ -28,10 +29,7 @@ Fixed the GlobalSettings.xml permissions so you can actually save your settings 
 Fixed the uninstall script so in the future upgrading freefilesync (rpm) will not remove your desktop file
 
 ###Reference
-https://www.freefilesync.org/forum/viewtopic.php?t=2585&p=13068&hilit=build#p13068
-https://www.freefilesync.org/forum/viewtopic.php?t=676
-https://www.freefilesync.org/forum/viewtopic.php?t=2585
-https://github.com/PhantomX/chinforpms/blob/9e65a18f78c6e842958a84d1862435495b77ef33/freefilesync/freefilesync.spec
+See REFERENCES.txt for full information about sources.
 
 2017-02-13 freefilesync 8.9-1
 Updated the install-ffs.sh reference to framework.
