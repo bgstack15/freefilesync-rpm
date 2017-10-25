@@ -11,6 +11,7 @@ find * -type d \
       -regex '.*icons.*' \
    \) \
    ! -regex '.*\/freefilesync\/app' \
+   ! -regex '.*\/freefilesync\/source' \
    | sed -e 's/^/%dir \//;'
 
 find * -mindepth 1 ! -name "${package}.spec.$$.swp" \

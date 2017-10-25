@@ -168,7 +168,6 @@ exit 0
 %dir /usr/share/freefilesync/inc
 %dir /usr/share/freefilesync/inc/icons
 %dir /usr/share/freefilesync/build
-%dir /usr/share/freefilesync/source
 /usr/share/freefilesync/inc/install-ffs.sh
 /usr/share/freefilesync/inc/sha256sum.txt
 /usr/share/freefilesync/inc/freefilesync_ver.txt
