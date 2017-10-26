@@ -193,6 +193,10 @@ exit 0
 /usr/share/doc/freefilesync/REFERENCES.txt
 
 %changelog
+* Wed Oct 25 2017 B Stack <bgstack15@gmail.com> 9.4-2
+- Updated content. See doc/README.txt
+- Now use source instead of precompiled binaries
+
 * Sat Oct 21 2017 B Stack <bgstack15@gmail.com> 9.4-1
 - Updated content. See doc/README.txt
 - Rearranged directory structure to match current standards

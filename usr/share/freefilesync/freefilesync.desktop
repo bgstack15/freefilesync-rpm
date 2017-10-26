@@ -1,6 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Name=FreeFileSync
+GenericName=File synchronization
 Comment=File sync tool
 Keywords=synchronization;
 Exec=/usr/share/freefilesync/app/usr/bin/FreeFileSync %f
