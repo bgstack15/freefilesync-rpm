@@ -52,6 +52,9 @@ rsync -av ./freefilesync-9.4/ %{buildroot}/ --exclude='**/.*.swp' --exclude='**/
 %make_install -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source
 %make_install -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source/RealTimeSync
 
+# this is basically like a make_clean I guess. If you want the source code provided in the package, comment this line.
+find %{buildroot}%{_datadir}/%{name}/source -mindepth 1 ! -regex '.*.patch' -exec rm -rf {} \; 2>/dev/null || :
+
 # Run install script, for the rpm assembled from pre-compiled binaries
 #if test -x %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh;
 #then
