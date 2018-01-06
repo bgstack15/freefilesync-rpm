@@ -28,8 +28,8 @@ s/\(\(.*packaging\|.*README\)\.txt\)/%doc %attr(444, -, -) \1/;
 s/\(.*CHANGELOG.*\)/%doc \1/;
 s/\(.*\.ini\|.*xml\)/%config %attr(666, -, -) \1/;
 s/\(.*\.desktop\)/%attr(666, -, -) \1/;
-s/\(.*\/app$\)/%attr(777, -, -) \1/;
 '
+#s/\(.*\/app$\)/%attr(777, -, -) \1/;
 
       ;;
    *)

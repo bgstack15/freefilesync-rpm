@@ -192,7 +192,7 @@ exit 0
 %config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
 /usr/share/freefilesync/source
 /usr/share/freefilesync/source/FreeFileSync_9.4.fc27.patch
-%attr(777, -, -) /usr/share/freefilesync/app
+/usr/share/freefilesync/app
 /usr/share/freefilesync/build/get-sources
 /usr/share/freefilesync/build/get-files
 /usr/share/freefilesync/build/pack
