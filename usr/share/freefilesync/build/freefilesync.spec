@@ -194,7 +194,6 @@ exit 0
 /usr/share/freefilesync/build/get-files
 /usr/share/freefilesync/build/pack
 /usr/share/freefilesync/build/localize_git.sh
-/usr/share/freefilesync/build/foo.sh
 /usr/share/freefilesync/build/files-for-versioning.txt
 /usr/share/freefilesync/build/freefilesync.spec
 /usr/share/freefilesync/build/scrub.txt

@@ -1,0 +1,113 @@
+diff -Naur source/FreeFileSync/Source/Makefile source-fc27/FreeFileSync/Source/Makefile
+--- source/FreeFileSync/Source/Makefile	2017-10-05 09:54:58.000000000 -0400
++++ source-fc27/FreeFileSync/Source/Makefile	2017-12-16 07:33:05.485960735 -0500
+@@ -10,8 +10,8 @@
+ LINKFLAGS = -s `wx-config --libs std, aui --debug=no` -lboost_thread -lboost_chrono -lboost_system -lz -pthread
+ 
+ #Gtk - support recycler/icon loading/no button border/grid scrolling
+-CXXFLAGS  += `pkg-config --cflags gtk+-2.0`
+-LINKFLAGS += `pkg-config --libs   gtk+-2.0`
++CXXFLAGS  += `pkg-config --cflags gtk+-3.0`
++LINKFLAGS += `pkg-config --libs   gtk+-3.0`
+ 
+ #support for SELinux (optional)
+ SELINUX_EXISTING=$(shell pkg-config --exists libselinux && echo YES)
+diff -Naur source/FreeFileSync/Source/RealTimeSync/Makefile source-fc27/FreeFileSync/Source/RealTimeSync/Makefile
+--- source/FreeFileSync/Source/RealTimeSync/Makefile	2017-10-05 09:54:58.000000000 -0400
++++ source-fc27/FreeFileSync/Source/RealTimeSync/Makefile	2017-12-16 07:33:05.485960735 -0500
+@@ -7,8 +7,8 @@
+ LINKFLAGS = -s `wx-config --libs std, aui --debug=no` -lboost_thread -lboost_chrono -lboost_system -lz -pthread
+ 
+ #Gtk - support "no button border"
+-CXXFLAGS  += `pkg-config --cflags gtk+-2.0`
+-LINKFLAGS += `pkg-config --libs   gtk+-2.0`
++CXXFLAGS  += `pkg-config --cflags gtk+-3.0`
++LINKFLAGS += `pkg-config --libs   gtk+-3.0`
+ 
+ CPP_LIST=
+ CPP_LIST+=application.cpp
+diff -Naur source/FreeFileSync/Source/ui/main_dlg.cpp source-fc27/FreeFileSync/Source/ui/main_dlg.cpp
+--- source/FreeFileSync/Source/ui/main_dlg.cpp	2017-10-05 09:54:58.000000000 -0400
++++ source-fc27/FreeFileSync/Source/ui/main_dlg.cpp	2017-12-16 07:33:52.706698115 -0500
+@@ -1024,7 +1024,7 @@
+         history.resize(globalSettings.gui.cfgFileHistMax);
+ 
+     globalSettings.gui.cfgFileHistory = history;
+-    globalSettings.gui.cfgFileHistFirstItemPos = m_listBoxHistory->GetTopItem();
++    globalSettings.gui.cfgFileHistFirstItemPos = 0;
+     //--------------------------------------------------------------------------------
+     globalSettings.gui.lastUsedConfigFiles.clear();
+     for (const Zstring& cfgFilePath : activeConfigFiles_)
+@@ -4862,6 +4862,7 @@
+ 
+     m_menuItemCheckVersionAuto->Check(updateCheckActive(globalCfg_.gui.lastUpdateCheck));
+ 
++    /*
+     if (shouldRunPeriodicUpdateCheck(globalCfg_.gui.lastUpdateCheck))
+     {
+         flashStatusInformation(_("Searching for program updates..."));
+@@ -4869,6 +4870,7 @@
+         periodicUpdateCheckEval(this, globalCfg_.gui.lastUpdateCheck, globalCfg_.gui.lastOnlineVersion,
+                                 periodicUpdateCheckRunAsync(periodicUpdateCheckPrepare().get()).get());
+     }
++    */
+ }
+ 
+ 
+@@ -4877,6 +4879,7 @@
+     //execute just once per startup!
+     Disconnect(wxEVT_IDLE, wxIdleEventHandler(MainDialog::OnRegularUpdateCheck), nullptr, this);
+ 
++    /*
+     if (shouldRunPeriodicUpdateCheck(globalCfg_.gui.lastUpdateCheck))
+     {
+         flashStatusInformation(_("Searching for program updates..."));
+@@ -4890,6 +4893,7 @@
+                                     resultAsync.get()); //run on main thread:
+         });
+     }
++    */
+ }
+ 
+ 
+diff -Naur source/FreeFileSync/Source/ui/version_check_impl.h source-fc27/FreeFileSync/Source/ui/version_check_impl.h
+--- source/FreeFileSync/Source/ui/version_check_impl.h	2017-10-05 09:54:59.000000000 -0400
++++ source-fc27/FreeFileSync/Source/ui/version_check_impl.h	2017-12-16 07:39:38.641100221 -0500
+@@ -14,7 +14,7 @@
+ 
+ namespace zen
+ {
+-inline
++
+ time_t getVersionCheckInactiveId()
+ {
+     //use current version to calculate a changing number for the inactive state near UTC begin, in order to always check for updates after installing a new version
+@@ -38,14 +38,14 @@
+ }
+ 
+ 
+-inline
++
+ time_t getVersionCheckCurrentTime()
+ {
+     return std::time(nullptr);
+ }
+ 
+ 
+-inline
++
+ bool shouldRunPeriodicUpdateCheck(time_t lastUpdateCheck)
+ {
+     if (lastUpdateCheck == getVersionCheckInactiveId())
+diff -Naur source/zen/scope_guard.h source-fc27/zen/scope_guard.h
+--- source/zen/scope_guard.h	2017-10-05 09:54:58.000000000 -0400
++++ source-fc27/zen/scope_guard.h	2017-12-16 07:39:21.256828745 -0500
+@@ -13,7 +13,7 @@
+ 
+ 
+ //std::uncaught_exceptions() currently unsupported on GCC and Clang => clean up ASAP
+-    static_assert(__GNUC__ < 7 || (__GNUC__ == 7 && (__GNUC_MINOR__ < 2 || (__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ <= 1))), "check std::uncaught_exceptions support");
++    //static_assert(__GNUC__ < 7 || (__GNUC__ == 7 && (__GNUC_MINOR__ < 2 || (__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ <= 1))), "check std::uncaught_exceptions support");
+ 
+ namespace __cxxabiv1
+ {
