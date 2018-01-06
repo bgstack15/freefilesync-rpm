@@ -1,7 +1,7 @@
 %global pname FreeFileSync
 Name:		freefilesync
 Version:	9.4
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	A file synchronization utility
 
 Group:		Applications/File
@@ -25,7 +25,7 @@ BuildRequires:  wxGTK-devel
 %description
 FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized directories.It is useful for GUI environments and for detailed file comparisons. Rsync is recommended for automated solutions and in headless environments.
 
-#%global debug_package %{nil}
+# %global debug_package %{nil}
 
 %prep
 #%setup -q
@@ -33,9 +33,14 @@ FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized 
 cd %{name}-%{version}/%{_datadir}/%{name}/source
 tar -zxf %{SOURCE1}
 cp %{SOURCE2} .
-patch -p0 < %{SOURCE2}
-sed -i -r -e 's4^(prefix\s*)=\s*%{_prefix}.*4\1= %{_datadir}/%{name}/app%{_prefix}4;' %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
+pushd .. ; patch -p0 < %{SOURCE2} ; popd
+sed -i -r -e 's@^(prefix\s*)=\s*%{_prefix}.*@\1= %{_datadir}/%{name}/app%{_prefix}@;' %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
 cp -p Changelog.txt FreeFileSync/Build/Changelog.txt
+ls -l %{pname}/Source/Makefile
+sed \
+  -e '/CXXFLAGS/s|-O3|-D"warn_static(arg)= " -DZEN_LINUX %{optflags}|g' \
+  -e '/LINKFLAGS/s|-s|%{__global_ldflags}|g' \
+  -i %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
 
 %build
 %make_build -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source
@@ -47,14 +52,14 @@ rsync -av ./freefilesync-9.4/ %{buildroot}/ --exclude='**/.*.swp' --exclude='**/
 %make_install -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source
 %make_install -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source/RealTimeSync
 
-# Run install script
+# Run install script, for the rpm assembled from pre-compiled binaries
 #if test -x %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh;
 #then
 #   %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh || exit 1
 #fi
 
 %clean
-#rm -rf %{buildroot}
+rm -rf %{buildroot}
 exit 0
 
 %post
@@ -168,31 +173,36 @@ exit 0
 %dir /usr/share/freefilesync/inc
 %dir /usr/share/freefilesync/inc/icons
 %dir /usr/share/freefilesync/build
-/usr/share/freefilesync/inc/install-ffs.sh
+%doc %attr(444, -, -) /usr/share/doc/freefilesync/README.txt
+/usr/share/doc/freefilesync/version.txt
+/usr/share/doc/freefilesync/REFERENCES.txt
+/usr/share/freefilesync/doc
+%attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
 /usr/share/freefilesync/inc/sha256sum.txt
 /usr/share/freefilesync/inc/freefilesync_ver.txt
-%config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
-/usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
-/usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
+/usr/share/freefilesync/inc/install-ffs.sh
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-64.png
+/usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
 /usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
 /usr/share/freefilesync/inc/uninstall-ffs.sh
-/usr/share/freefilesync/build/scrub.txt
-/usr/share/freefilesync/build/freefilesync.spec
-/usr/share/freefilesync/build/localize_git.sh
-/usr/share/freefilesync/build/pack
-/usr/share/freefilesync/build/get-files
-/usr/share/freefilesync/build/get-sources
-/usr/share/freefilesync/build/files-for-versioning.txt
-%attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
-/usr/share/freefilesync/doc
-%attr(777, -, -) /usr/share/freefilesync/app
+%config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
 /usr/share/freefilesync/source
-/usr/share/doc/freefilesync/version.txt
-%doc %attr(444, -, -) /usr/share/doc/freefilesync/README.txt
-/usr/share/doc/freefilesync/REFERENCES.txt
+/usr/share/freefilesync/source/FreeFileSync_9.4.fc27.patch
+%attr(777, -, -) /usr/share/freefilesync/app
+/usr/share/freefilesync/build/get-sources
+/usr/share/freefilesync/build/get-files
+/usr/share/freefilesync/build/pack
+/usr/share/freefilesync/build/localize_git.sh
+/usr/share/freefilesync/build/foo.sh
+/usr/share/freefilesync/build/files-for-versioning.txt
+/usr/share/freefilesync/build/freefilesync.spec
+/usr/share/freefilesync/build/scrub.txt
 
 %changelog
+* Sat Jan  6 2018 B Stack <bgstack15@gmail.com> 9.4-3
+- Updated content. See doc/README.txt
+
 * Wed Oct 25 2017 B Stack <bgstack15@gmail.com> 9.4-2
 - Updated content. See doc/README.txt
 - Now use source instead of precompiled binaries

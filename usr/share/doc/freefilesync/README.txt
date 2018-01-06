@@ -44,3 +44,6 @@ Rewrote spec icon deployment to match current design.
 
 * Wed Oct 25 2017 B Stack <bgstack15@gmail.com> 9.4-2
 - Built from source now!
+
+* Sat Jan  6 2018 B Stack <bgstack15@gmail.com> 9.4-3
+- trying to Fix listBoxHistory
