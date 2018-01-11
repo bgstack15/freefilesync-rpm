@@ -1,7 +1,7 @@
 %global pname FreeFileSync
 Name:		freefilesync
-Version:	9.4
-Release:	3%{?dist}
+Version:	9.6
+Release:	1%{?dist}
 Summary:	A file synchronization utility
 
 Group:		Applications/File
@@ -9,7 +9,7 @@ License:	GPL 3.0
 URL:		http://bgstack15.wordpress.com/
 Source0:	freefilesync.tgz
 Source1:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}_Source.tar.gz
-Source2:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}%{?dist}.patch
+Source2:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}.1%{?dist}.patch
 
 Packager:	Bgstack15 <bgstack15@gmail.com>
 Buildarch:	x86_64

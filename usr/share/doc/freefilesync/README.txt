@@ -48,3 +48,6 @@ Rewrote spec icon deployment to match current design.
 * Sat Jan  6 2018 B Stack <bgstack15@gmail.com> 9.4-3
 - Fix listBoxHistory to reduce application crashes
 - Update get-sources to work with alternate URLS with custom definitions
+
+* Sat Jan 10 2018 B Stack <bgstack15@gmail.com> 9.6-1
+- Version bump from upstream
