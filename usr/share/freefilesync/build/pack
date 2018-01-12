@@ -50,7 +50,7 @@ case "${type}" in
 
 ### PACKAGING for rhel/centos/fedora
 # if you copy-paste this, be sure to define package, version, shortversion
-rpmbuilddir=~/rpmbuild/
+rpmbuilddir=~/rpmbuild
 packagespecfile="${package}-${version}/usr/share/${package}/build/${package}.spec"
 . "${rpmbuilddir}/SOURCES/${package}-${version}/usr/share/${package}/build/get-sources"
 sed -n -e '1,/^\%files$/p;' "${rpmbuilddir}/SOURCES/${packagespecfile}" > "${rpmbuilddir}/SOURCES/${packagespecfile}.$$.swp" # removes files and changelog

@@ -9,7 +9,7 @@ License:	GPL 3.0
 URL:		http://bgstack15.wordpress.com/
 Source0:	freefilesync.tgz
 Source1:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}_Source.tar.gz
-Source2:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}.1%{?dist}.patch
+Source2:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}-1%{?dist}.patch
 
 Packager:	Bgstack15 <bgstack15@gmail.com>
 Buildarch:	x86_64
@@ -29,11 +29,11 @@ FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized 
 
 %prep
 #%setup -q
-%setup -c -n %{name}-%{version}
-cd %{name}-%{version}/%{_datadir}/%{name}/source
+%setup -c
+mv %{name}-%{version}/* . ; cd .%{_datadir}/%{name}/source
 tar -zxf %{SOURCE1}
 cp %{SOURCE2} .
-pushd .. ; patch -p0 < %{SOURCE2} ; popd
+patch -p1 < %{SOURCE2}
 sed -i -r -e 's@^(prefix\s*)=\s*%{_prefix}.*@\1= %{_datadir}/%{name}/app%{_prefix}@;' %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
 cp -p Changelog.txt FreeFileSync/Build/Changelog.txt
 ls -l %{pname}/Source/Makefile
@@ -43,14 +43,14 @@ sed \
   -i %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
 
 %build
-%make_build -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source
-%make_build -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source/RealTimeSync
+%make_build -C .%{_datadir}/%{name}/source/%{pname}/Source
+%make_build -C .%{_datadir}/%{name}/source/%{pname}/Source/RealTimeSync
 
 %install
 rm -rf %{buildroot}
-rsync -av ./freefilesync-9.4/ %{buildroot}/ --exclude='**/.*.swp' --exclude='**/.git'
-%make_install -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source
-%make_install -C %{name}-%{version}/%{_datadir}/%{name}/source/%{pname}/Source/RealTimeSync
+rsync -av ./ %{buildroot}/ --exclude='**/.*.swp' --exclude='**/.git'
+%make_install -C .%{_datadir}/%{name}/source/%{pname}/Source
+%make_install -C .%{_datadir}/%{name}/source/%{pname}/Source/RealTimeSync
 
 # this is basically like a make_clean I guess. If you want the source code provided in the package, comment this line.
 find %{buildroot}%{_datadir}/%{name}/source -mindepth 1 ! -regex '.*.patch' -exec rm -rf {} \; 2>/dev/null || :
@@ -191,7 +191,6 @@ exit 0
 /usr/share/freefilesync/inc/uninstall-ffs.sh
 %config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
 /usr/share/freefilesync/source
-/usr/share/freefilesync/source/FreeFileSync_9.4.fc27.patch
 /usr/share/freefilesync/app
 /usr/share/freefilesync/build/get-sources
 /usr/share/freefilesync/build/get-files
