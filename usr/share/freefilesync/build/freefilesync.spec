@@ -1,6 +1,6 @@
 %global pname FreeFileSync
 Name:		freefilesync
-Version:	9.6
+Version:	9.7
 Release:	1%{?dist}
 Summary:	A file synchronization utility
 

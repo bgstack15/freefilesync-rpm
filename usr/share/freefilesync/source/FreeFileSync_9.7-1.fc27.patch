@@ -1,6 +1,6 @@
-diff -Naur 9.6.0/FreeFileSync/Source/lib/versioning.cpp 9.6.2/FreeFileSync/Source/lib/versioning.cpp
---- 9.6.0/FreeFileSync/Source/lib/versioning.cpp	2017-12-07 08:41:15.000000000 -0500
-+++ 9.6.2/FreeFileSync/Source/lib/versioning.cpp	2018-01-10 20:06:48.183554688 -0500
+diff -Naur 9.7/FreeFileSync/Source/lib/versioning.cpp 9.7-1/FreeFileSync/Source/lib/versioning.cpp
+--- 9.7/FreeFileSync/Source/lib/versioning.cpp	2018-01-12 11:36:57.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/lib/versioning.cpp	2018-01-13 22:03:26.602290499 -0500
 @@ -110,13 +110,15 @@
          try { pd = AFS::getPathStatus(targetPath); /*throw FileError*/ }
          catch (FileError&)
@@ -18,9 +18,9 @@ diff -Naur 9.6.0/FreeFileSync/Source/lib/versioning.cpp 9.6.2/FreeFileSync/Sourc
  
          if (pd)
          {
-diff -Naur 9.6.0/FreeFileSync/Source/Makefile 9.6.2/FreeFileSync/Source/Makefile
---- 9.6.0/FreeFileSync/Source/Makefile	2017-12-07 08:41:14.000000000 -0500
-+++ 9.6.2/FreeFileSync/Source/Makefile	2018-01-10 19:32:06.920659469 -0500
+diff -Naur 9.7/FreeFileSync/Source/Makefile 9.7-1/FreeFileSync/Source/Makefile
+--- 9.7/FreeFileSync/Source/Makefile	2018-01-12 11:36:54.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/Makefile	2018-01-13 22:03:26.602290499 -0500
 @@ -10,8 +10,8 @@
  LINKFLAGS = -s `wx-config --libs std, aui --debug=no` -lboost_thread -lboost_chrono -lboost_system -lz -pthread
  
@@ -32,9 +32,9 @@ diff -Naur 9.6.0/FreeFileSync/Source/Makefile 9.6.2/FreeFileSync/Source/Makefile
  
  #support for SELinux (optional)
  SELINUX_EXISTING=$(shell pkg-config --exists libselinux && echo YES)
-diff -Naur 9.6.0/FreeFileSync/Source/RealTimeSync/Makefile 9.6.2/FreeFileSync/Source/RealTimeSync/Makefile
---- 9.6.0/FreeFileSync/Source/RealTimeSync/Makefile	2017-12-07 08:41:14.000000000 -0500
-+++ 9.6.2/FreeFileSync/Source/RealTimeSync/Makefile	2018-01-10 19:21:37.755640979 -0500
+diff -Naur 9.7/FreeFileSync/Source/RealTimeSync/Makefile 9.7-1/FreeFileSync/Source/RealTimeSync/Makefile
+--- 9.7/FreeFileSync/Source/RealTimeSync/Makefile	2018-01-12 11:36:54.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/RealTimeSync/Makefile	2018-01-13 22:03:26.603290515 -0500
 @@ -7,8 +7,8 @@
  LINKFLAGS = -s `wx-config --libs std, aui --debug=no` -lboost_thread -lboost_chrono -lboost_system -lz -pthread
  
@@ -46,10 +46,10 @@ diff -Naur 9.6.0/FreeFileSync/Source/RealTimeSync/Makefile 9.6.2/FreeFileSync/So
  
  CPP_LIST=
  CPP_LIST+=application.cpp
-diff -Naur 9.6.0/FreeFileSync/Source/ui/gui_generated.cpp 9.6.2/FreeFileSync/Source/ui/gui_generated.cpp
---- 9.6.0/FreeFileSync/Source/ui/gui_generated.cpp	2017-12-07 08:41:15.000000000 -0500
-+++ 9.6.2/FreeFileSync/Source/ui/gui_generated.cpp	2018-01-10 19:27:42.181127091 -0500
-@@ -4333,10 +4333,10 @@
+diff -Naur 9.7/FreeFileSync/Source/ui/gui_generated.cpp 9.7-1/FreeFileSync/Source/ui/gui_generated.cpp
+--- 9.7/FreeFileSync/Source/ui/gui_generated.cpp	2018-01-12 11:36:57.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/ui/gui_generated.cpp	2018-01-13 22:03:26.605290546 -0500
+@@ -4342,10 +4342,10 @@
  
      bSizer166->Add( m_bitmapEmail, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
  
@@ -62,19 +62,18 @@ diff -Naur 9.6.0/FreeFileSync/Source/ui/gui_generated.cpp 9.6.2/FreeFileSync/Sou
  
      bSizer166->Add( m_hyperlink2, 0, wxALIGN_CENTER_VERTICAL, 5 );
  
-diff -Naur 9.6.0/FreeFileSync/Source/ui/main_dlg.cpp 9.6.2/FreeFileSync/Source/ui/main_dlg.cpp
---- 9.6.0/FreeFileSync/Source/ui/main_dlg.cpp	2017-12-07 08:41:15.000000000 -0500
-+++ 9.6.2/FreeFileSync/Source/ui/main_dlg.cpp	2018-01-10 19:22:58.418412792 -0500
-@@ -1056,7 +1056,7 @@
-         history.resize(globalSettings.gui.cfgFileHistMax);
- 
-     globalSettings.gui.cfgFileHistory = history;
--    globalSettings.gui.cfgFileHistFirstItemPos = m_listBoxHistory->GetTopItem();
-+    globalSettings.gui.cfgFileHistFirstItemPos = 0;
-     //--------------------------------------------------------------------------------
-     globalSettings.gui.lastUsedConfigFiles.clear();
-     for (const Zstring& cfgFilePath : activeConfigFiles_)
-@@ -4882,7 +4882,7 @@
+diff -Naur 9.7/FreeFileSync/Source/ui/main_dlg.cpp 9.7-1/FreeFileSync/Source/ui/main_dlg.cpp
+--- 9.7/FreeFileSync/Source/ui/main_dlg.cpp	2018-01-12 11:36:57.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/ui/main_dlg.cpp	2018-01-13 22:22:38.417277163 -0500
+@@ -11,6 +11,7 @@
+ #include <zen/thread.h>
+ #include <zen/shell_execute.h>
+ #include <zen/perf.h>
++#include <zen/warn_static.h>
+ #include <wx/clipbrd.h>
+ #include <wx/wupdlock.h>
+ #include <wx/sound.h>
+@@ -4836,7 +4837,7 @@
          globalCfg_.gui.lastUpdateCheck = 0; //reset to GlobalSettings.xml default value!
  
      m_menuItemCheckVersionAuto->Check(updateCheckActive(globalCfg_.gui.lastUpdateCheck));
@@ -83,7 +82,7 @@ diff -Naur 9.6.0/FreeFileSync/Source/ui/main_dlg.cpp 9.6.2/FreeFileSync/Source/u
      if (shouldRunAutomaticUpdateCheck(globalCfg_.gui.lastUpdateCheck))
      {
          flashStatusInformation(_("Searching for program updates..."));
-@@ -4890,6 +4890,7 @@
+@@ -4844,6 +4845,7 @@
          automaticUpdateCheckEval(this, globalCfg_.gui.lastUpdateCheck, globalCfg_.gui.lastOnlineVersion,
                                   automaticUpdateCheckRunAsync(automaticUpdateCheckPrepare().get()).get());
      }
@@ -91,7 +90,7 @@ diff -Naur 9.6.0/FreeFileSync/Source/ui/main_dlg.cpp 9.6.2/FreeFileSync/Source/u
  }
  
  
-@@ -4897,7 +4898,7 @@
+@@ -4851,7 +4853,7 @@
  {
      //execute just once per startup!
      Disconnect(wxEVT_IDLE, wxIdleEventHandler(MainDialog::OnRegularUpdateCheck), nullptr, this);
@@ -100,7 +99,7 @@ diff -Naur 9.6.0/FreeFileSync/Source/ui/main_dlg.cpp 9.6.2/FreeFileSync/Source/u
      if (shouldRunAutomaticUpdateCheck(globalCfg_.gui.lastUpdateCheck))
      {
          flashStatusInformation(_("Searching for program updates..."));
-@@ -4911,6 +4912,7 @@
+@@ -4865,6 +4867,7 @@
                                       resultAsync.get()); //run on main thread:
          });
      }
@@ -108,21 +107,9 @@ diff -Naur 9.6.0/FreeFileSync/Source/ui/main_dlg.cpp 9.6.2/FreeFileSync/Source/u
  }
  
  
-diff -Naur 9.6.0/FreeFileSync/Source/ui/progress_indicator.cpp 9.6.2/FreeFileSync/Source/ui/progress_indicator.cpp
---- 9.6.0/FreeFileSync/Source/ui/progress_indicator.cpp	2017-12-07 08:41:15.000000000 -0500
-+++ 9.6.2/FreeFileSync/Source/ui/progress_indicator.cpp	2018-01-10 20:03:39.494750992 -0500
-@@ -2039,7 +2039,7 @@
-     //show log instead of graph if errors occurred! (not required for ignored warnings)
-     if (log.getItemCount(TYPE_ERROR | TYPE_FATAL_ERROR) > 0)
-         pnl_.m_notebookResult->ChangeSelection(posLog);
--    warn_static("/|\ not working on linux")
-+    //warn_static("/|\ not working on linux");
- 
-     //GetSizer()->SetSizeHints(this); //~=Fit() //not a good idea: will shrink even if window is maximized or was enlarged by the user
-     pnl_.Layout();
-diff -Naur 9.6.0/FreeFileSync/Source/ui/version_check_impl.h 9.6.2/FreeFileSync/Source/ui/version_check_impl.h
---- 9.6.0/FreeFileSync/Source/ui/version_check_impl.h	2017-12-07 08:41:15.000000000 -0500
-+++ 9.6.2/FreeFileSync/Source/ui/version_check_impl.h	2018-01-10 19:19:47.874589733 -0500
+diff -Naur 9.7/FreeFileSync/Source/ui/version_check_impl.h 9.7-1/FreeFileSync/Source/ui/version_check_impl.h
+--- 9.7/FreeFileSync/Source/ui/version_check_impl.h	2018-01-12 11:36:57.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/ui/version_check_impl.h	2018-01-13 22:03:26.611290640 -0500
 @@ -14,7 +14,7 @@
  
  namespace zen
@@ -147,15 +134,3 @@ diff -Naur 9.6.0/FreeFileSync/Source/ui/version_check_impl.h 9.6.2/FreeFileSync/
  bool shouldRunAutomaticUpdateCheck(time_t lastUpdateCheck)
  {
      if (lastUpdateCheck == getVersionCheckInactiveId())
-diff -Naur 9.6.0/zen/file_io.cpp 9.6.2/zen/file_io.cpp
---- 9.6.0/zen/file_io.cpp	2017-12-07 08:41:15.000000000 -0500
-+++ 9.6.2/zen/file_io.cpp	2018-01-10 20:08:19.179423932 -0500
-@@ -131,7 +131,7 @@
- 
- size_t FileInput::read(void* buffer, size_t bytesToRead) //throw FileError, ErrorFileLocked, X; return "bytesToRead" bytes unless end of stream!
- {
--    warn_static("implement PERF_AWESOME_BUFFER program wide for all buffers!?")
-+    //warn_static("implement PERF_AWESOME_BUFFER program wide for all buffers!?")
- 
-     /*
-         FFS 8.9-9.5 perf issues on macOS: https://www.freefilesync.org/forum/viewtopic.php?t=4808
