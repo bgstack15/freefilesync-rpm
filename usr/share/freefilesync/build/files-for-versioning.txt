@@ -1,6 +1,4 @@
-doc/README.txt
+doc/README.md
 doc/version.txt
 inc/freefilesync_ver.txt
-build/localize_git.sh
-build/scrub.txt
 build/freefilesync.spec

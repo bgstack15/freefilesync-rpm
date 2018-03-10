@@ -1,0 +1,136 @@
+diff -Naur 9.7/FreeFileSync/Source/lib/versioning.cpp 9.7-1/FreeFileSync/Source/lib/versioning.cpp
+--- 9.7/FreeFileSync/Source/lib/versioning.cpp	2018-01-12 11:36:57.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/lib/versioning.cpp	2018-01-13 22:03:26.602290499 -0500
+@@ -110,13 +110,15 @@
+         try { pd = AFS::getPathStatus(targetPath); /*throw FileError*/ }
+         catch (FileError&)
+         {
++        }
+ 
+-            warn_static("remove after test: https://www.freefilesync.org/forum/viewtopic.php?f=8&t=4765&p=15981#p15981")
++        /*    warn_static("remove after test: https://www.freefilesync.org/forum/viewtopic.php?f=8&t=4765&p=15981#p15981")
+             warn_static("really? is previous exception is more relevant?")
+             throw;
+ 
+ 
+         } //previous exception is more relevant
++        */
+ 
+         if (pd)
+         {
+diff -Naur 9.7/FreeFileSync/Source/Makefile 9.7-1/FreeFileSync/Source/Makefile
+--- 9.7/FreeFileSync/Source/Makefile	2018-01-12 11:36:54.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/Makefile	2018-01-13 22:03:26.602290499 -0500
+@@ -10,8 +10,8 @@
+ LINKFLAGS = -s `wx-config --libs std, aui --debug=no` -lboost_thread -lboost_chrono -lboost_system -lz -pthread
+ 
+ #Gtk - support recycler/icon loading/no button border/grid scrolling
+-CXXFLAGS  += `pkg-config --cflags gtk+-2.0`
+-LINKFLAGS += `pkg-config --libs   gtk+-2.0`
++CXXFLAGS  += `pkg-config --cflags gtk+-3.0`
++LINKFLAGS += `pkg-config --libs   gtk+-3.0`
+ 
+ #support for SELinux (optional)
+ SELINUX_EXISTING=$(shell pkg-config --exists libselinux && echo YES)
+diff -Naur 9.7/FreeFileSync/Source/RealTimeSync/Makefile 9.7-1/FreeFileSync/Source/RealTimeSync/Makefile
+--- 9.7/FreeFileSync/Source/RealTimeSync/Makefile	2018-01-12 11:36:54.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/RealTimeSync/Makefile	2018-01-13 22:03:26.603290515 -0500
+@@ -7,8 +7,8 @@
+ LINKFLAGS = -s `wx-config --libs std, aui --debug=no` -lboost_thread -lboost_chrono -lboost_system -lz -pthread
+ 
+ #Gtk - support "no button border"
+-CXXFLAGS  += `pkg-config --cflags gtk+-2.0`
+-LINKFLAGS += `pkg-config --libs   gtk+-2.0`
++CXXFLAGS  += `pkg-config --cflags gtk+-3.0`
++LINKFLAGS += `pkg-config --libs   gtk+-3.0`
+ 
+ CPP_LIST=
+ CPP_LIST+=application.cpp
+diff -Naur 9.7/FreeFileSync/Source/ui/gui_generated.cpp 9.7-1/FreeFileSync/Source/ui/gui_generated.cpp
+--- 9.7/FreeFileSync/Source/ui/gui_generated.cpp	2018-01-12 11:36:57.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/ui/gui_generated.cpp	2018-01-13 22:03:26.605290546 -0500
+@@ -4342,10 +4342,10 @@
+ 
+     bSizer166->Add( m_bitmapEmail, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+ 
+-    m_hyperlink2 = new wxHyperlinkCtrl( m_panel41, wxID_ANY, _("zenju@freefilesync.org"), wxT("mailto:zenju@freefilesync.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
++    m_hyperlink2 = new wxHyperlinkCtrl( m_panel41, wxID_ANY, _("bgstack15@gmail.com"), wxT("mailto:bgstack15@gmail.com"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+     m_hyperlink2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, true, wxEmptyString ) );
+     m_hyperlink2->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+-    m_hyperlink2->SetToolTip( _("mailto:zenju@freefilesync.org") );
++    m_hyperlink2->SetToolTip( _("mailto:bgstack15@gmail.com") );
+ 
+     bSizer166->Add( m_hyperlink2, 0, wxALIGN_CENTER_VERTICAL, 5 );
+ 
+diff -Naur 9.7/FreeFileSync/Source/ui/main_dlg.cpp 9.7-1/FreeFileSync/Source/ui/main_dlg.cpp
+--- 9.7/FreeFileSync/Source/ui/main_dlg.cpp	2018-01-12 11:36:57.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/ui/main_dlg.cpp	2018-01-13 22:22:38.417277163 -0500
+@@ -11,6 +11,7 @@
+ #include <zen/thread.h>
+ #include <zen/shell_execute.h>
+ #include <zen/perf.h>
++#include <zen/warn_static.h>
+ #include <wx/clipbrd.h>
+ #include <wx/wupdlock.h>
+ #include <wx/sound.h>
+@@ -4836,7 +4837,7 @@
+         globalCfg_.gui.lastUpdateCheck = 0; //reset to GlobalSettings.xml default value!
+ 
+     m_menuItemCheckVersionAuto->Check(updateCheckActive(globalCfg_.gui.lastUpdateCheck));
+-
++    /*
+     if (shouldRunAutomaticUpdateCheck(globalCfg_.gui.lastUpdateCheck))
+     {
+         flashStatusInformation(_("Searching for program updates..."));
+@@ -4844,6 +4845,7 @@
+         automaticUpdateCheckEval(this, globalCfg_.gui.lastUpdateCheck, globalCfg_.gui.lastOnlineVersion,
+                                  automaticUpdateCheckRunAsync(automaticUpdateCheckPrepare().get()).get());
+     }
++    */
+ }
+ 
+ 
+@@ -4851,7 +4853,7 @@
+ {
+     //execute just once per startup!
+     Disconnect(wxEVT_IDLE, wxIdleEventHandler(MainDialog::OnRegularUpdateCheck), nullptr, this);
+-
++    /*
+     if (shouldRunAutomaticUpdateCheck(globalCfg_.gui.lastUpdateCheck))
+     {
+         flashStatusInformation(_("Searching for program updates..."));
+@@ -4865,6 +4867,7 @@
+                                      resultAsync.get()); //run on main thread:
+         });
+     }
++    */
+ }
+ 
+ 
+diff -Naur 9.7/FreeFileSync/Source/ui/version_check_impl.h 9.7-1/FreeFileSync/Source/ui/version_check_impl.h
+--- 9.7/FreeFileSync/Source/ui/version_check_impl.h	2018-01-12 11:36:57.000000000 -0500
++++ 9.7-1/FreeFileSync/Source/ui/version_check_impl.h	2018-01-13 22:03:26.611290640 -0500
+@@ -14,7 +14,7 @@
+ 
+ namespace zen
+ {
+-inline
++
+ time_t getVersionCheckInactiveId()
+ {
+     //use current version to calculate a changing number for the inactive state near UTC begin, in order to always check for updates after installing a new version
+@@ -38,14 +38,12 @@
+ }
+ 
+ 
+-inline
+ time_t getVersionCheckCurrentTime()
+ {
+     return std::time(nullptr);
+ }
+ 
+ 
+-inline
+ bool shouldRunAutomaticUpdateCheck(time_t lastUpdateCheck)
+ {
+     if (lastUpdateCheck == getVersionCheckInactiveId())

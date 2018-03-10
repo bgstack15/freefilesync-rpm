@@ -1,6 +1,6 @@
 %global pname FreeFileSync
 Name:		freefilesync
-Version:	9.7
+Version:	9.9
 Release:	1%{?dist}
 Summary:	A file synchronization utility
 
@@ -8,7 +8,7 @@ Group:		Applications/File
 License:	GPL 3.0 
 URL:		http://bgstack15.wordpress.com/
 Source0:	freefilesync.tgz
-Source1:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}_Source.tar.gz
+Source1:	https://www.freefilesync.org/download/%{pname}_%{version}_Source.zip
 Source2:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}-1%{?dist}.patch
 
 Packager:	Bgstack15 <bgstack15@gmail.com>
@@ -31,7 +31,8 @@ FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized 
 #%setup -q
 %setup -c
 mv %{name}-%{version}/* . ; cd .%{_datadir}/%{name}/source
-tar -zxf %{SOURCE1}
+#tar -zxf %{SOURCE1}
+7z x %{SOURCE1}
 cp %{SOURCE2} .
 patch -p1 < %{SOURCE2}
 sed -i -r -e 's@^(prefix\s*)=\s*%{_prefix}.*@\1= %{_datadir}/%{name}/app%{_prefix}@;' %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
@@ -176,9 +177,9 @@ exit 0
 %dir /usr/share/freefilesync/inc
 %dir /usr/share/freefilesync/inc/icons
 %dir /usr/share/freefilesync/build
-%doc %attr(444, -, -) /usr/share/doc/freefilesync/README.txt
 /usr/share/doc/freefilesync/version.txt
 /usr/share/doc/freefilesync/REFERENCES.txt
+/usr/share/doc/freefilesync/README.md
 /usr/share/freefilesync/doc
 %attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
 /usr/share/freefilesync/inc/sha256sum.txt
@@ -192,22 +193,13 @@ exit 0
 %config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
 /usr/share/freefilesync/source
 /usr/share/freefilesync/app
+/usr/share/freefilesync/app/.keep
 /usr/share/freefilesync/build/get-sources
 /usr/share/freefilesync/build/get-files
 /usr/share/freefilesync/build/pack
-/usr/share/freefilesync/build/localize_git.sh
 /usr/share/freefilesync/build/files-for-versioning.txt
 /usr/share/freefilesync/build/freefilesync.spec
-/usr/share/freefilesync/build/scrub.txt
 
 %changelog
-* Sat Jan  6 2018 B Stack <bgstack15@gmail.com> 9.4-3
-- Updated content. See doc/README.txt
-
-* Wed Oct 25 2017 B Stack <bgstack15@gmail.com> 9.4-2
-- Updated content. See doc/README.txt
-- Now use source instead of precompiled binaries
-
-* Sat Oct 21 2017 B Stack <bgstack15@gmail.com> 9.4-1
-- Updated content. See doc/README.txt
-- Rearranged directory structure to match current standards
+* Sat Mar 10 2018 B Stack <bgstack15@gmail.com> 9.9-1
+- Rpm built. See doc/README.md.
