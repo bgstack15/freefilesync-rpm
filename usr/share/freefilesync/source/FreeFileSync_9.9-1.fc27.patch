@@ -1,0 +1,176 @@
+diff -Naur 9.9-0/FreeFileSync/Source/lib/dir_lock.cpp 9.9-1/FreeFileSync/Source/lib/dir_lock.cpp
+--- 9.9-0/FreeFileSync/Source/lib/dir_lock.cpp	2018-03-09 10:02:55.000000000 -0500
++++ 9.9-1/FreeFileSync/Source/lib/dir_lock.cpp	2018-03-18 09:09:31.164563723 -0400
+@@ -13,6 +13,7 @@
+ #include <zen/file_access.h>
+ #include <zen/file_io.h>
+ #include <zen/optional.h>
++#include <zen/warn_static.h>
+ #include <wx/log.h>
+ #include <wx/app.h>
+ 
+diff -Naur 9.9-0/FreeFileSync/Source/Makefile 9.9-1/FreeFileSync/Source/Makefile
+--- 9.9-0/FreeFileSync/Source/Makefile	2018-03-09 10:02:53.000000000 -0500
++++ 9.9-1/FreeFileSync/Source/Makefile	2018-03-18 08:58:12.650937625 -0400
+@@ -10,8 +10,8 @@
+ LINKFLAGS = -s `wx-config --libs std, aui --debug=no` -lboost_thread -lboost_chrono -lboost_system -lz -pthread
+ 
+ #Gtk - support recycler/icon loading/no button border/grid scrolling
+-CXXFLAGS  += `pkg-config --cflags gtk+-2.0`
+-LINKFLAGS += `pkg-config --libs   gtk+-2.0`
++CXXFLAGS  += `pkg-config --cflags gtk+-3.0`
++LINKFLAGS += `pkg-config --libs   gtk+-3.0`
+ 
+ #support for SELinux (optional)
+ SELINUX_EXISTING=$(shell pkg-config --exists libselinux && echo YES)
+@@ -90,6 +90,7 @@
+ CPP_LIST+=../../wx+/popup_dlg.cpp
+ CPP_LIST+=../../wx+/popup_dlg_generated.cpp
+ CPP_LIST+=../../wx+/zlib_wrap.cpp
++CPP_LIST+=../../xBRZ/src/xbrz.cpp
+ 
+ OBJECT_LIST = $(CPP_LIST:%.cpp=../Obj/FFS_GCC_Make_Release/ffs/src/%.o)
+ 
+diff -Naur 9.9-0/FreeFileSync/Source/RealTimeSync/Makefile 9.9-1/FreeFileSync/Source/RealTimeSync/Makefile
+--- 9.9-0/FreeFileSync/Source/RealTimeSync/Makefile	2018-03-09 10:02:53.000000000 -0500
++++ 9.9-1/FreeFileSync/Source/RealTimeSync/Makefile	2018-03-18 09:40:23.701268842 -0400
+@@ -7,8 +7,8 @@
+ LINKFLAGS = -s `wx-config --libs std, aui --debug=no` -lboost_thread -lboost_chrono -lboost_system -lz -pthread
+ 
+ #Gtk - support "no button border"
+-CXXFLAGS  += `pkg-config --cflags gtk+-2.0`
+-LINKFLAGS += `pkg-config --libs   gtk+-2.0`
++CXXFLAGS  += `pkg-config --cflags gtk+-3.0`
++LINKFLAGS += `pkg-config --libs   gtk+-3.0`
+ 
+ CPP_LIST=
+ CPP_LIST+=application.cpp
+@@ -36,6 +36,7 @@
+ CPP_LIST+=../../../wx+/image_resources.cpp
+ CPP_LIST+=../../../wx+/popup_dlg.cpp
+ CPP_LIST+=../../../wx+/popup_dlg_generated.cpp
++CPP_LIST+=../../../xBRZ/src/xbrz.cpp
+ 
+ OBJECT_LIST=$(CPP_LIST:%.cpp=../../Obj/RTS_GCC_Make_Release/ffs/src/rts/%.o)
+ 
+diff -Naur 9.9-0/FreeFileSync/Source/ui/gui_generated.cpp 9.9-1/FreeFileSync/Source/ui/gui_generated.cpp
+--- 9.9-0/FreeFileSync/Source/ui/gui_generated.cpp	2018-03-09 10:02:55.000000000 -0500
++++ 9.9-1/FreeFileSync/Source/ui/gui_generated.cpp	2018-03-18 08:57:43.041430272 -0400
+@@ -4376,10 +4376,10 @@
+ 
+     bSizer166->Add( m_bitmapEmail, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+ 
+-    m_hyperlink2 = new wxHyperlinkCtrl( m_panel41, wxID_ANY, _("zenju@freefilesync.org"), wxT("mailto:zenju@freefilesync.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
++    m_hyperlink2 = new wxHyperlinkCtrl( m_panel41, wxID_ANY, _("bgstack15@gmail.com"), wxT("mailto:bgstack15@gmail.com"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+     m_hyperlink2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, true, wxEmptyString ) );
+     m_hyperlink2->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+-    m_hyperlink2->SetToolTip( _("mailto:zenju@freefilesync.org") );
++    m_hyperlink2->SetToolTip( _("mailto:bgstack15@gmail.com") );
+ 
+     bSizer166->Add( m_hyperlink2, 0, wxALIGN_CENTER_VERTICAL, 5 );
+ 
+diff -Naur 9.9-0/FreeFileSync/Source/ui/main_dlg.cpp 9.9-1/FreeFileSync/Source/ui/main_dlg.cpp
+--- 9.9-0/FreeFileSync/Source/ui/main_dlg.cpp	2018-03-09 10:02:55.000000000 -0500
++++ 9.9-1/FreeFileSync/Source/ui/main_dlg.cpp	2018-03-18 08:57:43.042430289 -0400
+@@ -11,6 +11,7 @@
+ #include <zen/thread.h>
+ #include <zen/shell_execute.h>
+ #include <zen/perf.h>
++#include <zen/warn_static.h>
+ #include <wx/clipbrd.h>
+ #include <wx/wupdlock.h>
+ #include <wx/sound.h>
+@@ -4816,7 +4817,7 @@
+         globalCfg_.gui.lastUpdateCheck = 0; //reset to GlobalSettings.xml default value!
+ 
+     m_menuItemCheckVersionAuto->Check(updateCheckActive(globalCfg_.gui.lastUpdateCheck));
+-
++    /*
+     if (shouldRunAutomaticUpdateCheck(globalCfg_.gui.lastUpdateCheck))
+     {
+         flashStatusInformation(_("Searching for program updates..."));
+@@ -4824,6 +4825,7 @@
+         automaticUpdateCheckEval(this, globalCfg_.gui.lastUpdateCheck, globalCfg_.gui.lastOnlineVersion,
+                                  automaticUpdateCheckRunAsync(automaticUpdateCheckPrepare().get()).get());
+     }
++    */
+ }
+ 
+ 
+@@ -4831,7 +4833,7 @@
+ {
+     //execute just once per startup!
+     Disconnect(wxEVT_IDLE, wxIdleEventHandler(MainDialog::OnRegularUpdateCheck), nullptr, this);
+-
++    /*
+     if (shouldRunAutomaticUpdateCheck(globalCfg_.gui.lastUpdateCheck))
+     {
+         flashStatusInformation(_("Searching for program updates..."));
+@@ -4845,6 +4847,7 @@
+                                      resultAsync.get()); //run on main thread:
+         });
+     }
++    */
+ }
+ 
+ 
+diff -Naur 9.9-0/FreeFileSync/Source/ui/small_dlgs.cpp 9.9-1/FreeFileSync/Source/ui/small_dlgs.cpp
+--- 9.9-0/FreeFileSync/Source/ui/small_dlgs.cpp	2018-03-09 10:02:55.000000000 -0500
++++ 9.9-1/FreeFileSync/Source/ui/small_dlgs.cpp	2018-03-18 09:06:00.816959471 -0400
+@@ -961,7 +961,8 @@
+     //setMainInstructionFont(*m_staticTextMain);
+ 
+     m_bitmapActivation->SetBitmap(getResourceImage(L"website"));
+-    m_textCtrlOfflineActivationKey->ForceUpper();
++    // Fedora 27 does not have wxWidgets 3.1.1 yet. https://github.com/wxWidgets/wxWidgets/commit/69b66e9e2e2b8e49e3816acdde079686ce9b0da1
++    //m_textCtrlOfflineActivationKey->ForceUpper();
+ 
+     m_textCtrlLastError           ->ChangeValue(lastErrorMsg);
+     m_textCtrlManualActivationUrl ->ChangeValue(manualActivationUrl);
+diff -Naur 9.9-0/FreeFileSync/Source/ui/version_check_impl.h 9.9-1/FreeFileSync/Source/ui/version_check_impl.h
+--- 9.9-0/FreeFileSync/Source/ui/version_check_impl.h	2018-03-09 10:02:55.000000000 -0500
++++ 9.9-1/FreeFileSync/Source/ui/version_check_impl.h	2018-03-18 08:57:43.043430307 -0400
+@@ -14,7 +14,7 @@
+ 
+ namespace fff
+ {
+-inline
++
+ time_t getVersionCheckInactiveId()
+ {
+     //use current version to calculate a changing number for the inactive state near UTC begin, in order to always check for updates after installing a new version
+@@ -38,7 +38,6 @@
+ }
+ 
+ 
+-inline
+ time_t getVersionCheckCurrentTime()
+ {
+     return std::time(nullptr);
+diff -Naur 9.9-0/wx+/grid.cpp 9.9-1/wx+/grid.cpp
+--- 9.9-0/wx+/grid.cpp	2018-03-09 10:02:55.000000000 -0500
++++ 9.9-1/wx+/grid.cpp	2018-03-18 09:15:25.630641955 -0400
+@@ -1169,7 +1169,9 @@
+             {
+                 if (overlapPix != 0)
+                 {
+-                    const double scrollSpeed = wnd_.ToDIP(overlapPix) * mouseDragSpeedIncScrollU; //unit: [scroll units / sec]
++                    // Fedora 27 does not have wxGTK 3.1.1 yet. This probably breaks HiDPI usage
++                    //const double scrollSpeed = wnd_.ToDIP(overlapPix) * mouseDragSpeedIncScrollU; //unit: [scroll units / sec]
++                    const double scrollSpeed = overlapPix * mouseDragSpeedIncScrollU; //unit: [scroll units / sec]
+                     toScroll += scrollSpeed * deltaSecs;
+                 }
+                 else
+diff -Naur 9.9-0/zen/scope_guard.h 9.9-1/zen/scope_guard.h
+--- 9.9-0/zen/scope_guard.h	2018-03-09 10:02:55.000000000 -0500
++++ 9.9-1/zen/scope_guard.h	2018-03-18 09:24:36.012081107 -0400
+@@ -13,7 +13,8 @@
+ 
+ 
+ //std::uncaught_exceptions() currently unsupported on GCC and Clang => clean up ASAP
+-    static_assert(__GNUC__ < 7 || (__GNUC__ == 7 && (__GNUC_MINOR__ < 3 || (__GNUC_MINOR__ == 3 && __GNUC_PATCHLEVEL__ <= 0))), "check std::uncaught_exceptions support");
++    // Fedora 27 uses gcc 7.3.1
++    static_assert(__GNUC__ < 7 || (__GNUC__ == 7 && (__GNUC_MINOR__ < 3 || (__GNUC_MINOR__ == 3 && __GNUC_PATCHLEVEL__ <= 1))), "check std::uncaught_exceptions support");
+ 
+ namespace __cxxabiv1
+ {

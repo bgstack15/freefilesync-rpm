@@ -1,15 +1,17 @@
 %global pname FreeFileSync
+%define dummy_package   0
 Name:		freefilesync
 Version:	9.9
 Release:	1%{?dist}
 Summary:	A file synchronization utility
 
-Group:		Applications/File
+Group:	Applications/File
 License:	GPL 3.0 
 URL:		http://bgstack15.wordpress.com/
 Source0:	freefilesync.tgz
 Source1:	https://www.freefilesync.org/download/%{pname}_%{version}_Source.zip
 Source2:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}-1%{?dist}.patch
+Source3: https://astuteinternet.dl.sourceforge.net/project/xbrz/xBRZ/xBRZ_1.6.zip
 
 Packager:	Bgstack15 <bgstack15@gmail.com>
 Buildarch:	x86_64
@@ -37,7 +39,17 @@ mv %{name}-%{version}/* . ; cd .%{_datadir}/%{name}/source
 /usr/bin/7za x %{SOURCE1}
 cp %{SOURCE2} .
 patch -p1 < %{SOURCE2}
+
+# Fetch the extra lib that was not included by upstream but is required to build
+# assuming pwd is .%{_datadir}/%{name}/source
+mkdir -p xBRZ/src ; pushd xBRZ/src
+/usr/bin/7za x %{SOURCE3}
+popd
+
+# Make the installed location the custom directory for this package
 sed -i -r -e 's@^(prefix\s*)=\s*%{_prefix}.*@\1= %{_datadir}/%{name}/app%{_prefix}@;' %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
+
+# Do some misc cleanup
 cp -p Changelog.txt FreeFileSync/Build/Changelog.txt
 ls -l %{pname}/Source/Makefile
 sed \
@@ -58,18 +70,21 @@ rsync -av ./ %{buildroot}/ --exclude='**/.*.swp' --exclude='**/.git'
 # this is basically like a make_clean I guess. If you want the source code provided in the package, comment this line.
 find %{buildroot}%{_datadir}/%{name}/source -mindepth 1 ! -regex '.*.patch' -exec rm -rf {} \; 2>/dev/null || :
 
-# Run install script, for the rpm assembled from pre-compiled binaries
-#if test -x %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh;
-#then
-#   %{buildroot}%{_datarootdir}/%{name}/inc/install-ffs.sh || exit 1
-#fi
+# Solve the readme problem
+#  echo "all README.md files"
+#  find %{buildroot} -name 'README.md' || :
+#  echo "THE CORRECT SEARCH"
+#  find %{buildroot} -maxdepth 1 -name 'README.md' -type l || :
+find %{buildroot} -maxdepth 1 -name 'README.md' -type l -exec unlink {} \; 2>%{devtty} || :
+
+exit 0
 
 %clean
 rm -rf %{buildroot}
 exit 0
 
 %post
-# rpm post 2017-02-13
+# rpm post 2018-03-18
 
 # Initialize config file
 ini_source=%{_datarootdir}/%{name}/inc/GlobalSettings.xml
@@ -84,7 +99,7 @@ chmod 0666 "${ini_source}" "${ini_dest}" 2>/dev/null
 which xdg-icon-resource 1>/dev/null 2>&1 && {
 
    # Deploy default application icons
-   for theme in hicolor HighContrast;
+   for theme in hicolor HighContrast ;
    do
 
       # Deploy scalable application icons
@@ -95,6 +110,7 @@ which xdg-icon-resource 1>/dev/null 2>&1 && {
       do
          xdg-icon-resource install --context apps --size "${size}" --theme "${theme}" --novendor --noupdate %{_datarootdir}/%{name}/inc/icons/%{name}-${theme}-${size}.png freefilesync &
       done
+
    done
 
    # Deploy custom application icons
@@ -102,7 +118,7 @@ which xdg-icon-resource 1>/dev/null 2>&1 && {
 
    # Update icon caches
    xdg-icon-resource forceupdate &
-   for word in hicolor HighContrast;
+   for word in hicolor HighContrast ;
    do
       touch --no-create %{_datarootdir}/icons/${word}
       gtk-update-icon-cache %{_datarootdir}/icons/${word} &
@@ -113,31 +129,31 @@ which xdg-icon-resource 1>/dev/null 2>&1 && {
 # Deploy desktop file
 desktop-file-install --rebuild-mime-info-cache %{_datarootdir}/%{name}/%{name}.desktop 1>/dev/null 2>&1
 
+# Add mimetype and set default application
+# NONE see bgscripts or palemoon-rpm for examples
+
 exit 0
 
 %preun
-# rpm preun 2017-10-24
-# Bup config if different from reference ini
-{
-if test "$1" = "0";
+# rpm preun 2018-03-18
+if test "$1" = "0" ;
 then
+{
+   # total uninstall
+
+   # Bup config if different from reference ini
    ini_source=%{_datarootdir}/%{name}/inc/GlobalSettings.xml
    ini_dest=%{_datarootdir}/%{name}/app%{_datarootdir}/FreeFileSync/GlobalSettings.xml
    if ! cmp "${ini_dest}" "${ini_source}";
    then
       /bin/cp -p "${ini_dest}" "${ini_dest}.$( date "+%Y-%m-%d" ).uninstalled"
    fi
-fi
-} 1>/dev/null 2>&1
-exit 0
 
+   # Remove mimetype definitions
+   # NONE
 
-%postun
-# rpm postun 2017-02-13
-if test "$1" = "0";
-then
-{
-   # total uninstall
+   # Remove systemd files
+   # NONE
 
    # Remove desktop file
    rm -f %{_datarootdir}/applications/%{name}.desktop
@@ -147,7 +163,7 @@ then
    which xdg-icon-resource && {
 
       # Remove default application icons
-      for theme in hicolor HighConstrast;
+      for theme in hicolor HighContrast ;
       do
 
          # Remove scalable application icons
@@ -161,17 +177,31 @@ then
 
       done
 
+      # Remove custom application icons
+      # NONE
+
+      # Remove default mimetype icons
+      # NONE
+
+      # Remove custom mimetype icons
+      # NONE
+
       # Update icon caches
       xdg-icon-resource forceupdate &
-      for word in hicolor HighContrast;
+      for word in hicolor HighContrast ;
       do
          touch --no-create %{_datarootdir}/icons/${word}
          gtk-update-icon-cache %{_datarootdir}/icons/${word} &
       done
 
    }
+
 } 1>/dev/null 2>&1
-fi 
+fi
+exit 0
+
+%postun
+# rpm postun 2018-03-18
 exit 0
 
 %files
@@ -180,7 +210,7 @@ exit 0
 %dir /usr/share/freefilesync/inc
 %dir /usr/share/freefilesync/inc/icons
 /usr/share/doc/freefilesync/REFERENCES.txt
-/usr/share/doc/freefilesync/README.md
+%doc %attr(444, -, -) /usr/share/doc/freefilesync/README.md
 /usr/share/doc/freefilesync/version.txt
 %attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
 /usr/share/freefilesync/source
@@ -203,5 +233,5 @@ exit 0
 /usr/share/freefilesync/app/.keep
 
 %changelog
-* Sat Mar 10 2018 B Stack <bgstack15@gmail.com> 9.9-1
+* Sun Mar 18 2018 B Stack <bgstack15@gmail.com> 9.9-1
 - Rpm built. See doc/README.md.

@@ -43,7 +43,7 @@ For a new release from upstream, download the latest source using Firefox while 
 For a new version release, download the latest sha256sum file from the maintainer server. Then pull up the list of files that need to be manually updated for version numbers.
 
     package=freefilesync
-    thisver=9.9-0
+    thisver=9.9-1
     cd ~/rpmbuild/SOURCES/${package}-${thisver}/usr/share/${package}
     curl "http://albion320.no-ip.biz/smith122/repo/patch/${package}/sha256sum.txt" > ./inc/sha256sum.txt
     vi $( cat build/files-for-versioning.txt )
@@ -92,6 +92,6 @@ Rewrote spec icon deployment to match current design.
 * Sat Jan 13 2018 B Stack <bgstack15@gmail.com> 9.7-1
 - Version bump from upstream
 
-* Sat Mar 10 2018 B Stack <bgstack15@gmail.com> 9.9-1
+* Sun Mar 18 2018 B Stack <bgstack15@gmail.com> 9.9-1
 - Version bump from upstream
 - Rearrange package and documentation to current standards

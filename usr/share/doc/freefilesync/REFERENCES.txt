@@ -180,3 +180,93 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 * Thu Mar 30 2017 Phantom X <megaphantomx at bol dot com dot br> - 8.10-1
 - Initial spec.
+
+########################################
+# REFERENCE 4
+https://www.freefilesync.org/forum/viewtopic.php?t=4288&p=14356&hilit=compile#p14356
+Here are my notes from my successful build, as far as I can tell the program runs correctly but please do not try it with any data you can't afford to lose until you are confident it is working correctly for you (I make no guarantees as I have only tested the program briefly). The build from source is quick and easy so long as you have installed all the required libraries and edit some problem code in a couple of the source files.
+
+Several development libraries are needed as these are not installed by default in the standard Linux Mint 18.1 Mate desktop distribution. You also need to install the g++ c-plusplus compiler before you begin. I also suggest installing remake and using this instead of make as the diagnostics are more extensive if the make process fails for any reason.
+
+You will need to install the following:
+
+sudo apt install g++ libwxgtk3.0-dev libgtk2.0-dev libboost-dev libboost-thread-dev libboost-chrono-dev libboost-system-dev
+
+Now download and unzip the source code from https://www.freefilesync.org/download.php
+
+cd to the top of the newly unzipped folder structure and make the edits listed in the diff file output below (the listing shows the differences between the downloaded source files (file a) and the edited version needed to compile without errors (file b)).
+
+There is just one line to add to /Source/fs/abstract.h and one line and two blocks of code to comment out in /Source/ui/main_dlg.cpp. For those unfamiliar with diff output the lines between the @@ list the file line number and the range of lines listed out with the file differences. Any lines with the leading - need to replaced by the lines with the leading + . In the case of the first difference only a single line needs to be added so there is no line with a leading - :
+
+diff --git a/FreeFileSync/Source/fs/abstract.h b/FreeFileSync/Source/fs/abstract.h
+index eece564..eef41fb 100755
+--- a/FreeFileSync/Source/fs/abstract.h
++++ b/FreeFileSync/Source/fs/abstract.h
+@@ -12,6 +12,7 @@
+#include <zen/zstring.h>
+#include <zen/optional.h>
+#include <zen/serialize.h> //InputStream/OutputStream support buffered stream concept
++#include <zen/warn_static.h> //Added to avoid make file errors
+#include "../lib/icon_holder.h"
+
+
+diff --git a/FreeFileSync/Source/ui/main_dlg.cpp b/FreeFileSync/Source/ui/main_dlg.cpp
+index ebe4101..071206a 100755
+--- a/FreeFileSync/Source/ui/main_dlg.cpp
++++ b/FreeFileSync/Source/ui/main_dlg.cpp
+@@ -956,7 +956,7 @@ xmlAccess::XmlGlobalSettings MainDialog::getGlobalCfgBeforeExit()
+history.resize(globalSettings.gui.cfgFileHistMax);
+
+globalSettings.gui.cfgFileHistory = history;
+- globalSettings.gui.cfgFileHistFirstItemPos = m_listBoxHistory->GetTopItem();
++// globalSettings.gui.cfgFileHistFirstItemPos = m_listBoxHistory->GetTopItem();
+//--------------------------------------------------------------------------------
+globalSettings.gui.lastUsedConfigFiles.clear();
+for (const Zstring& cfgFilePath : activeConfigFiles)
+@@ -4771,13 +4771,13 @@ void MainDialog::OnMenuCheckVersionAutomatically(wxCommandEvent& event)
+
+m_menuItemCheckVersionAuto->Check(updateCheckActive(globalCfg.gui.lastUpdateCheck));
+
+- if (shouldRunPeriodicUpdateCheck(globalCfg.gui.lastUpdateCheck))
++/* if (shouldRunPeriodicUpdateCheck(globalCfg.gui.lastUpdateCheck))
+{
+flashStatusInformation(_("Searching for program updates..."));
+//synchronous update check is sufficient here:
+periodicUpdateCheckEval(this, globalCfg.gui.lastUpdateCheck, globalCfg.gui.lastOnlineVersion,
+periodicUpdateCheckRunAsync(periodicUpdateCheckPrepare().get()).get());
+- }
++ } */
+}
+
+
+@@ -4786,7 +4786,7 @@ void MainDialog::OnRegularUpdateCheck(wxIdleEvent& event)
+//execute just once per startup!
+Disconnect(wxEVT_IDLE, wxIdleEventHandler(MainDialog::OnRegularUpdateCheck), nullptr, this);
+
+- if (shouldRunPeriodicUpdateCheck(globalCfg.gui.lastUpdateCheck))
++/* if (shouldRunPeriodicUpdateCheck(globalCfg.gui.lastUpdateCheck))
+{
+flashStatusInformation(_("Searching for program updates..."));
+
+@@ -4798,7 +4798,7 @@ void MainDialog::OnRegularUpdateCheck(wxIdleEvent& event)
+periodicUpdateCheckEval(this, globalCfg.gui.lastUpdateCheck, globalCfg.gui.lastOnlineVersion,
+resultAsync.get()); //run on main thread:
+});
+- }
++ } */
+}
+
+having saved the newly edited files
+cd to the /Source directory
+now build the program with
+make
+(you will get one or two warnings but the make should complete without fatal errors)
+followed by
+sudo make install
+
+You can then add the program to your Mint Menu and you will find a nice png image for the program launch icon in /usr/share/FreeFileSync/Resources.zip named FreeFileSync.png. So extract this png file into /usr/share/FreeFileSync (you will need root privileges for this) and link to this when you add the FreeFileSync menu item.
+
+I used git to track all my edits as I was debugging the build process documented above and I recommend you initiate a git project in the unzipped source files folder too if you wish to try your own changes to the source.
+
+good luck,
+doubledodge

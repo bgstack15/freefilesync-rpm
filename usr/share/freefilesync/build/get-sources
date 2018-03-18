@@ -1,5 +1,6 @@
 #!/bin/sh
 # File: get-sources
+# Version: 2018-03-18
 __inputdir="${rpmbuilddir}/SOURCES"
 test -z "${rpmbuilddir}" && __inputdir="${debdir}"
 sha256sumfile="${__inputdir}/${package}-${version}/usr/share/${package}/inc/sha256sum.txt"
@@ -13,6 +14,7 @@ clean_getsources() {
 getsource() {
    # call: getsource ~/rpmbuilddir/SOURCES/filename.tar.gz http://sourcefile/file.tar.gz http://sourcealt1/file.tar.gz
    # will check the sha256sum file to ensure good download
+
    local destfile="${1}" ; shift
    local sourceurl1="${1}"
    local sourceurl2="${2}"
@@ -25,8 +27,7 @@ getsource() {
    touch "${destfile}" 2>/dev/null || { echo "Cannot modify ${destfile}. Run as root, perhaps. Aborted."; exit 1; }
    local attempts=0
    local thesecurlopts=""
-   local h1=""
-   local h2=""
+   local h1="" ; local h2=""
    local canconnect=0 ; local td=""
    test -f "${localsourcedir}/${destfileshort}" && cp -pf "${localsourcedir}/${destfileshort}" "${destfile}"
    thissha=$( sha256sum "${destfile}" 2>/dev/null | cut -d' ' -f1 )
@@ -51,7 +52,6 @@ getsource() {
                thesecurlopts="-k"
                ;;
             4)
-               set -x
                # try a few specific headers
                h1='User-Agent: Mozilla/5.0\ \(X11;\ Fedora;\ Linux\ x86_64;\ rv:58.0\)\ Gecko/20100101\ Firefox/58.0' 
                h2="Host: ${td}"
@@ -119,7 +119,7 @@ do
    # any additional transformations should be alturl2, etc. and added to the getsource call in a few lines
    alturl1="$( echo "${line}" | sed -r -e 's/albion320\.no-ip\.biz\//storage1:180\//;' )"
 
-   destfile="${__inputdir}/$( echo "${line}" | sed -r -e 's4^.*\/44;' )"
+   destfile="${__inputdir}/$( echo "${line}" | sed -r -e 's@^.*\/@@;' )"
    #getsource "${line}" "${destfile}"
    getsource "${destfile}" $( echo "${line}" "${alturl1}" | xargs -n1 | awk '!x[$0]++' | xargs )
 
@@ -132,8 +132,6 @@ do
    # If building a deb, update the rules file
    if test -n "${debdir}" ;
    then
-      set -x
-      echo "FINDTHIS"
       sed -i -r -e "/^\s*#.*@NO_MORE_SOURCES\s*$/iSOURCE${__x}=\"${destfile}\"
 " "${debdir}/${package}-${version}/usr/share/${package}/build/debian-${package}/rules"
    fi
