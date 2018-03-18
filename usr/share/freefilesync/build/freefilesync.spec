@@ -20,6 +20,8 @@ BuildRequires:  gtk3-devel
 BuildRequires:  gtk+-devel
 BuildRequires:  wxGTK3-devel
 BuildRequires:  wxGTK-devel
+BuildRequires:  /usr/bin/7za
+BuildRequires:  webkitgtk4-devel
 #Requires:	
 
 %description
@@ -32,7 +34,7 @@ FreeFileSync is a fantastic, cross-platform FOSS tool for managing synchronized 
 %setup -c
 mv %{name}-%{version}/* . ; cd .%{_datadir}/%{name}/source
 #tar -zxf %{SOURCE1}
-7z x %{SOURCE1}
+/usr/bin/7za x %{SOURCE1}
 cp %{SOURCE2} .
 patch -p1 < %{SOURCE2}
 sed -i -r -e 's@^(prefix\s*)=\s*%{_prefix}.*@\1= %{_datadir}/%{name}/app%{_prefix}@;' %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
@@ -174,31 +176,31 @@ exit 0
 
 %files
 %dir /usr/share/freefilesync
+%dir /usr/share/freefilesync/build
 %dir /usr/share/freefilesync/inc
 %dir /usr/share/freefilesync/inc/icons
-%dir /usr/share/freefilesync/build
-/usr/share/doc/freefilesync/version.txt
 /usr/share/doc/freefilesync/REFERENCES.txt
 /usr/share/doc/freefilesync/README.md
-/usr/share/freefilesync/doc
+/usr/share/doc/freefilesync/version.txt
 %attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
-/usr/share/freefilesync/inc/sha256sum.txt
-/usr/share/freefilesync/inc/freefilesync_ver.txt
-/usr/share/freefilesync/inc/install-ffs.sh
-/usr/share/freefilesync/inc/icons/freefilesync-hicolor-64.png
-/usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
-/usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
-/usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
-/usr/share/freefilesync/inc/uninstall-ffs.sh
-%config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
 /usr/share/freefilesync/source
-/usr/share/freefilesync/app
-/usr/share/freefilesync/app/.keep
+/usr/share/freefilesync/build/files-for-versioning.txt
 /usr/share/freefilesync/build/get-sources
 /usr/share/freefilesync/build/get-files
-/usr/share/freefilesync/build/pack
-/usr/share/freefilesync/build/files-for-versioning.txt
 /usr/share/freefilesync/build/freefilesync.spec
+/usr/share/freefilesync/build/pack
+/usr/share/freefilesync/doc
+/usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-64.png
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
+/usr/share/freefilesync/inc/freefilesync_ver.txt
+/usr/share/freefilesync/inc/sha256sum.txt
+/usr/share/freefilesync/inc/install-ffs.sh
+%config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
+/usr/share/freefilesync/inc/uninstall-ffs.sh
+/usr/share/freefilesync/app
+/usr/share/freefilesync/app/.keep
 
 %changelog
 * Sat Mar 10 2018 B Stack <bgstack15@gmail.com> 9.9-1
