@@ -12,7 +12,7 @@ find * -type d \
    \) \
    ! -regex '.*\/freefilesync\/app' \
    ! -regex '.*\/freefilesync\/source' \
-   | sed -e 's/^/%dir \//;'
+   | sort | sed -e 's/^/%dir \//;'
 
 find * -mindepth 1 ! -name "${package}.spec.$$.swp" \
    \( \
@@ -23,7 +23,7 @@ find * -mindepth 1 ! -name "${package}.spec.$$.swp" \
    ! -regex '.*\/freefilesync\/source\/.+' \
    ! -regex '.*?.swp' \
    ! -regex '.*?DEBIAN.*?' \
-   | sed -r -e '
+   | sort | sed -r -e '
 s/^/\//;
 s/((.*packaging\.txt|.*README\.(txt|md)))/%doc %attr(444, -, -) \1/;
 s/(.*CHANGELOG.*)/%doc \1/;

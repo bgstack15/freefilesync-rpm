@@ -209,28 +209,28 @@ exit 0
 %dir /usr/share/freefilesync/build
 %dir /usr/share/freefilesync/inc
 %dir /usr/share/freefilesync/inc/icons
-/usr/share/doc/freefilesync/REFERENCES.txt
 %doc %attr(444, -, -) /usr/share/doc/freefilesync/README.md
+/usr/share/doc/freefilesync/REFERENCES.txt
 /usr/share/doc/freefilesync/version.txt
-%attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
-/usr/share/freefilesync/source
-/usr/share/freefilesync/build/files-for-versioning.txt
-/usr/share/freefilesync/build/get-sources
-/usr/share/freefilesync/build/get-files
-/usr/share/freefilesync/build/freefilesync.spec
-/usr/share/freefilesync/build/pack
-/usr/share/freefilesync/doc
-/usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
-/usr/share/freefilesync/inc/icons/freefilesync-hicolor-64.png
-/usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
-/usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
-/usr/share/freefilesync/inc/freefilesync_ver.txt
-/usr/share/freefilesync/inc/sha256sum.txt
-/usr/share/freefilesync/inc/install-ffs.sh
-%config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
-/usr/share/freefilesync/inc/uninstall-ffs.sh
 /usr/share/freefilesync/app
 /usr/share/freefilesync/app/.keep
+/usr/share/freefilesync/build/files-for-versioning.txt
+/usr/share/freefilesync/build/freefilesync.spec
+/usr/share/freefilesync/build/get-files
+/usr/share/freefilesync/build/get-sources
+/usr/share/freefilesync/build/pack
+/usr/share/freefilesync/doc
+%attr(666, -, -) /usr/share/freefilesync/freefilesync.desktop
+/usr/share/freefilesync/inc/freefilesync_ver.txt
+%config %attr(666, -, -) /usr/share/freefilesync/inc/GlobalSettings.xml
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-128.png
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-64.png
+/usr/share/freefilesync/inc/icons/freefilesync-hicolor-scalable.svg
+/usr/share/freefilesync/inc/icons/freefilesync-HighContrast-scalable.svg
+/usr/share/freefilesync/inc/install-ffs.sh
+/usr/share/freefilesync/inc/sha256sum.txt
+/usr/share/freefilesync/inc/uninstall-ffs.sh
+/usr/share/freefilesync/source
 
 %changelog
 * Sun Mar 18 2018 B Stack <bgstack15@gmail.com> 9.9-1
