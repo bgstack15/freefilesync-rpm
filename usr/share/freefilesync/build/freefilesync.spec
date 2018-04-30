@@ -1,7 +1,7 @@
 %global pname FreeFileSync
 %define dummy_package   0
 Name:		freefilesync
-Version:	9.9
+Version:	10.0
 Release:	1%{?dist}
 Summary:	A file synchronization utility
 
@@ -233,5 +233,5 @@ exit 0
 /usr/share/freefilesync/source
 
 %changelog
-* Sun Mar 18 2018 B Stack <bgstack15@gmail.com> 9.9-1
+* Mon Apr 30 2018 B Stack <bgstack15@gmail.com> 10.0-1
 - Rpm built. See doc/README.md.

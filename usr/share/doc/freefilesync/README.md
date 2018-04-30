@@ -15,7 +15,7 @@ A build dependency is my [bgscripts](https://github.com/bgstack15/bgscripts) pac
 Download this wrapper package source and run the pack utility.
 
     package=freefilesync
-    thisver=9.9-1
+    thisver=10.0-1
     mkdir -p ~/rpmbuild/{SOURCES,RPMS,SPECS,BUILD,BUILDROOT}
     cd ~/rpmbuild/SOURCES
     git clone https://github.com/bgstack15/freefilesync-rpm "${package}-${thisver}"
@@ -33,7 +33,7 @@ For a new release from upstream, download the latest source using Firefox while 
 
     # Download the latest source from:
     cd /mnt/public/www/smith122/repo/patch/freefilesync
-    thisver=9.9
+    thisver=10.0
     curl -O -J http://download1053.mediafireuserdownload.com/efawy8dj1uog/nzrklstofjb7xa6/FreeFileSync_${thisver}_Source.zip
     # Assemble patch file for each architecture (fc27, el7, etc.)
     # Collect the sha256sum for each source object (tarball, patch, etc.).
@@ -43,7 +43,7 @@ For a new release from upstream, download the latest source using Firefox while 
 For a new version release, download the latest sha256sum file from the maintainer server. Then pull up the list of files that need to be manually updated for version numbers.
 
     package=freefilesync
-    thisver=9.9-1
+    thisver=10.0-1
     cd ~/rpmbuild/SOURCES/${package}-${thisver}/usr/share/${package}
     curl "http://albion320.no-ip.biz/smith122/repo/patch/${package}/sha256sum.txt" > ./inc/sha256sum.txt
     vi $( cat build/files-for-versioning.txt )
@@ -95,3 +95,6 @@ Rewrote spec icon deployment to match current design.
 * Sun Mar 18 2018 B Stack <bgstack15@gmail.com> 9.9-1
 - Version bump from upstream
 - Rearrange package and documentation to current standards
+
+* Mon Apr 30 2018 B Stack <bgstack152gmail.com> 10.0-1
+- Version bump from upstream
