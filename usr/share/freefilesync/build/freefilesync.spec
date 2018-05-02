@@ -11,7 +11,6 @@ URL:		http://bgstack15.wordpress.com/
 Source0:	freefilesync.tgz
 Source1:	https://www.freefilesync.org/download/%{pname}_%{version}_Source.zip
 Source2:	https://albion320.no-ip.biz/smith122/repo/patch/%{name}/%{pname}_%{version}-1%{?dist}.patch
-Source3: https://astuteinternet.dl.sourceforge.net/project/xbrz/xBRZ/xBRZ_1.6.zip
 
 Packager:	Bgstack15 <bgstack15@gmail.com>
 Buildarch:	x86_64
@@ -40,12 +39,6 @@ mv %{name}-%{version}/* . ; cd .%{_datadir}/%{name}/source
 cp %{SOURCE2} .
 patch -p1 < %{SOURCE2}
 
-# Fetch the extra lib that was not included by upstream but is required to build
-# assuming pwd is .%{_datadir}/%{name}/source
-mkdir -p xBRZ/src ; pushd xBRZ/src
-/usr/bin/7za x %{SOURCE3}
-popd
-
 # Make the installed location the custom directory for this package
 sed -i -r -e 's@^(prefix\s*)=\s*%{_prefix}.*@\1= %{_datadir}/%{name}/app%{_prefix}@;' %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
 
@@ -53,7 +46,7 @@ sed -i -r -e 's@^(prefix\s*)=\s*%{_prefix}.*@\1= %{_datadir}/%{name}/app%{_prefi
 cp -p Changelog.txt FreeFileSync/Build/Changelog.txt
 ls -l %{pname}/Source/Makefile
 sed \
-  -e '/CXXFLAGS/s|-O3|-D"warn_static(arg)= " -DZEN_LINUX %{optflags}|g' \
+  -e '/^-O3/s|-O3|-D"warn_static(arg)= " -DZEN_LINUX %{optflags}|g' \
   -e '/LINKFLAGS/s|-s|%{__global_ldflags}|g' \
   -i %{pname}/Source/Makefile %{pname}/Source/RealTimeSync/Makefile
 
