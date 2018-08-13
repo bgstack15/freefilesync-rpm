@@ -1,1 +1,1 @@
-usr/share/doc/freefilesync/README.md
+#movingtogitlab [https://gitlab.com/bgstack15/freefilesync-rpm](https://gitlab.com/bgstack15/freefilesync-rpm)
